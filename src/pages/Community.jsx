@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 import { useHub } from '../HubContext';
 import { categories } from '../api';
 import { Tag, Avatar, Action, ErrorText } from '../components/UI';
+import { normalizeHttpsLink } from '../links';
+import { AttachmentPicker, AttachmentDownloads } from '../components/Attachments';
+import { validateAttachments } from '../attachments';
+
+const writableCategories = categories.filter(
+  (category) => !['전체', '공지·운영 안내'].includes(category),
+);
 export function Board({ category = '전체' }) {
   const { state, navigate, requireUser } = useHub(),
     [selected, setSelected] = useState(category),
@@ -52,7 +59,10 @@ export function Board({ category = '전체' }) {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <Action primary onClick={() => requireUser(() => navigate('#write'))}>
+        <Action
+          primary
+          onClick={() => requireUser(() => navigate('#write/' + encodeURIComponent(selected)))}
+        >
           ＋ 새 글 작성
         </Action>
       </div>
@@ -132,15 +142,25 @@ export function Board({ category = '전체' }) {
     </>
   );
 }
-export function WritePost() {
+export function WritePost({ category = '전체' }) {
   const { action, navigate } = useHub(),
     [busy, setBusy] = useState(false),
+    [attachments, setAttachments] = useState([]),
+    [readingFiles, setReadingFiles] = useState(false),
     [error, setError] = useState('');
+  const initialCategory = writableCategories.includes(category) ? category : writableCategories[0];
+  const boardRoute = categories.includes(category)
+    ? '#board/' + encodeURIComponent(category)
+    : '#board';
   async function submit(e) {
     e.preventDefault();
+    if (busy || readingFiles) return;
     const payload = Object.fromEntries(new FormData(e.currentTarget));
+    setError('');
     setBusy(true);
     try {
+      payload.relatedUrl = normalizeHttpsLink(payload.relatedUrl);
+      payload.attachments = validateAttachments(attachments);
       const result = await action('publish-post', payload);
       navigate('#post/' + result.id);
     } catch (err) {
@@ -155,7 +175,7 @@ export function WritePost() {
           max-[760px]:[&_h1]:text-[24px] article`}
     >
       <div className={'text-muted m-[15px_0_25px] text-[12px] breadcrumb'}>
-        <a href="#board">커뮤니티</a> / 새 글 작성
+        <a href={boardRoute}>커뮤니티</a> / 새 글 작성
       </div>
       <form
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
@@ -169,12 +189,10 @@ export function WritePost() {
         <h1>어떤 이야기를 나누고 싶나요?</h1>
         <label>
           게시판
-          <select name="category">
-            {categories
-              .filter((c) => !['전체', '공지·운영 안내'].includes(c))
-              .map((c) => (
-                <option key={c}>{c}</option>
-              ))}
+          <select name="category" defaultValue={initialCategory} className="mt-2">
+            {writableCategories.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
           </select>
         </label>
         <label>
@@ -191,6 +209,25 @@ export function WritePost() {
             placeholder="개발 경험, 질문, 작품 이야기를 자유롭게 나눠 주세요."
           />
         </label>
+        <label htmlFor="post-related-url">관련 HTTPS 링크 (선택)</label>
+        <input
+          id="post-related-url"
+          name="relatedUrl"
+          type="url"
+          maxLength={2000}
+          placeholder="https://"
+          aria-describedby="post-related-url-help"
+          className="mt-1.5"
+        />
+        <p id="post-related-url-help" className="mt-2 text-xs leading-relaxed text-muted">
+          공유할 파일·자료·작품의 HTTPS 주소를 입력해 주세요.
+        </p>
+        <AttachmentPicker
+          files={attachments}
+          onChange={setAttachments}
+          disabled={busy}
+          onReadingChange={setReadingFiles}
+        />
         <p
           className={`text-muted text-[12px]
           [.team-welcome_&]:m-[0_0_15px]
@@ -201,55 +238,22 @@ export function WritePost() {
           등록한 글은 다른 로그인 회원에게 공개됩니다.
         </p>
         <ErrorText message={error} />
-        <div
-          className={`flex-wrap gap-2.5 flex
-          [.original-boards_&]:grid-cols-[repeat(auto-fit,minmax(125px,1fr))]
-          [.original-boards_&]:gap-2.5
-          [.original-boards_&]:mt-4.5
-          [.original-boards_&]:grid
-          max-[650px]:[.original-boards_&]:grid-cols-[repeat(2,minmax(0,1fr))]
-          [.original-welcome_&]:gap-2 actions`}
-        >
+        <div className="mt-6 flex items-center justify-end gap-3 pt-5">
           <button
-            className={`bg-brand text-white [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
-          hover:[background:#7942c7]
-          [.original-columns_&]:text-[#8463b4]
-          [.original-columns_&]:[background:#f3f3f4]
-          [.original-columns_&]:[border-color:#ebeaec]
-          [.original-columns_&]:rounded-[12px]
-          [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
-          [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
-          [.team-welcome_&]:rounded-[12px]
-          [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
-          [.public-profile-actions_&]:flex-1
-          [.original-welcome_button&]:text-white
-          [.original-welcome_button&]:bg-brand
-          [.original-welcome_button&]:[border-color:#0000]
-          [.original-welcome_button&]:shadow-[0_5px_12px_#9467d420]
-          [.original-welcome_button&:hover]:text-white
-          [.original-welcome_button&:hover]:[background:#6e43c5]
-          [.original-programs_>_&]:text-[#77698b]
-          [.original-programs_>_&]:whitespace-nowrap
-          [.original-programs_>_&]:bg-white
-          [.original-programs_>_&]:[border-width:1px]
-          [.original-programs_>_&]:[border-style:solid]
-          [.original-programs_>_&]:[border-color:#dad1e7]
-          [.original-programs_>_&]:p-[11px_17px]
-          max-[650px]:[.original-programs_>_&]:w-full primary`}
-            disabled={busy}
-          >
-            등록
-          </button>
-          <a
-            className={`text-[#8b7e9e] [background:0_0] [border-width:0] [border-style:none] [border-color:currentColor] p-1
-          text-[12px] textlink`}
-            href="#board"
+            type="button"
+            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-5 py-2.5 text-sm font-semibold text-ink hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink disabled:cursor-wait"
+            onClick={() => navigate(boardRoute)}
+            disabled={busy || readingFiles}
           >
             취소
-          </a>
+          </button>
+          <button
+            type="submit"
+            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-brand bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:border-[#6e43c5] hover:bg-[#6e43c5] hover:text-white disabled:cursor-wait"
+            disabled={busy || readingFiles}
+          >
+            {busy ? '등록 중…' : readingFiles ? '파일 준비 중…' : '등록'}
+          </button>
         </div>
       </form>
     </div>
@@ -396,6 +400,12 @@ function Comment({ comment, postId, nested = false }) {
 export function PostDetail({ id }) {
   const { state, action, notify } = useHub();
   const p = state.posts.find((p) => p.id === Number(id));
+  let relatedUrl = '';
+  try {
+    relatedUrl = normalizeHttpsLink(p?.relatedUrl);
+  } catch {
+    // Older or external posts may contain unsupported URLs.
+  }
   if (!p)
     return (
       <div
@@ -455,6 +465,37 @@ export function PostDetail({ id }) {
         <div className={'whitespace-pre-wrap p-[30px_0] text-[15px] leading-[2] articlebody'}>
           {p.body}
         </div>
+        <AttachmentDownloads files={p.attachments} />
+        {relatedUrl && (
+          <a
+            href={relatedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-6 flex items-center gap-3 rounded-xl border border-solid border-line bg-canvas p-4 text-ink transition-colors hover:border-brand hover:text-brand"
+          >
+            <svg
+              className="h-5 w-5 shrink-0 text-brand"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
+            >
+              <path
+                d="m10 13 4-4M8 16l-1 1a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0m0 2 1-1a4 4 0 0 1 6 6l-5 5a4 4 0 0 1-6 0"
+                transform="translate(2 1)"
+              />
+            </svg>
+            <span className="min-w-0 flex-1">
+              <strong className="block text-sm">관련 파일·자료 보기</strong>
+              <span className="mt-1 block break-all text-xs text-muted">{relatedUrl}</span>
+            </span>
+            <span className="shrink-0 text-brand" aria-hidden="true">
+              ↗
+            </span>
+            <span className="sr-only">새 탭에서 열기</span>
+          </a>
+        )}
         <div
           className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]

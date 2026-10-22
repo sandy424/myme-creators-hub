@@ -33,7 +33,7 @@ npm test          # 로컬 UI 테스트 API 기능 검사
 | 팀협업·프로젝트·작업 공간 링크            | `src/pages/Projects.jsx`            |
 | 로그인·회원가입                           | `src/components/AuthDialog.jsx`     |
 | 검색형 활동 국가 선택                     | `src/components/CountrySelect.jsx`  |
-| 프로필 편집·공개 프로필                   | `src/components/ProfileDialog.jsx`  |
+| 프로필 편집·공개 프로필                   | `src/components/Profile.jsx`        |
 | 채팅                                      | `src/components/ChatDialog.jsx`     |
 | 커리어·지갑·공식 기회 팝업                | `src/components/ActivityDialog.jsx` |
 | 재사용 버튼·아바타·팝업                   | `src/components/UI.jsx`             |

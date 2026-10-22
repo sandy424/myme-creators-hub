@@ -1,3 +1,6 @@
+import { normalizeHttpsLink } from '../links.js';
+import { validateAttachments } from '../attachments.js';
+
 // Browser-local UI adapter. No real backend is needed, and no data is pre-seeded.
 // This is not production authentication. Use fictitious test credentials only.
 export const STORAGE_KEY = 'myme-react-ui-v1';
@@ -216,14 +219,31 @@ export async function mockApi(action, body) {
   }
   if (action === 'publish-post') {
     if (!body.title?.trim() || !body.body?.trim()) fail('제목과 본문을 입력해 주세요.');
+    const relatedUrl = normalizeHttpsLink(body.relatedUrl);
+    const attachments = validateAttachments(body.attachments);
     const id = db.nextId++;
     db.entities.push({
       id,
       kind: 'post',
       owner: me.id,
-      payload: { title: body.title, body: body.body, category: body.category },
+      payload: {
+        title: body.title,
+        body: body.body,
+        category: body.category,
+        relatedUrl,
+        attachments,
+      },
     });
-    write(db);
+    try {
+      write(db);
+    } catch (error) {
+      if (error.name === 'QuotaExceededError') {
+        fail(
+          '첨부자료를 저장할 공간이 부족합니다. 파일 용량을 줄이거나 HTTPS 링크로 공유해 주세요.',
+        );
+      }
+      throw error;
+    }
     return { id };
   }
   if (action === 'save-project') {

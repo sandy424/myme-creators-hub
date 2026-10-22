@@ -3,50 +3,29 @@ import { Modal, Avatar, Action, ErrorText } from './UI';
 import CountrySelect, { exactCountry } from './CountrySelect';
 import { publicOptions, safeUrl } from '../api';
 import { Check } from './AuthDialog';
+import { prepareProfilePhoto, PROFILE_PHOTO_ACCEPT } from '../profilePhoto';
 export default function ProfileDialog({ user, onClose, onSave }) {
   const [country, setCountry] = useState(user.country || ''),
     [photo, setPhoto] = useState(user.photo || ''),
     [busy, setBusy] = useState(false),
     [reading, setReading] = useState(false),
+    [photoError, setPhotoError] = useState(''),
     [error, setError] = useState('');
   async function readPhoto(file) {
     if (!file) return;
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 1048576) {
-      setError('JPG·PNG·WEBP 형식의 1MB 이하 사진을 선택해 주세요.');
-      return;
-    }
+    setPhotoError('');
     setReading(true);
     try {
-      const bitmap = await createImageBitmap(file),
-        canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
-      const side = Math.min(bitmap.width, bitmap.height);
-      canvas
-        .getContext('2d')
-        .drawImage(
-          bitmap,
-          (bitmap.width - side) / 2,
-          (bitmap.height - side) / 2,
-          side,
-          side,
-          0,
-          0,
-          256,
-          256,
-        );
-      setPhoto(canvas.toDataURL('image/png'));
-      bitmap.close();
-      setError('');
-    } catch {
-      setError('정상적인 사진 파일을 선택해 주세요.');
+      setPhoto(await prepareProfilePhoto(file));
+    } catch (err) {
+      setPhotoError(err.message || '사진을 처리하지 못했습니다. 다시 선택해 주세요.');
     } finally {
       setReading(false);
     }
   }
   async function submit(e) {
     e.preventDefault();
-    if (reading) return;
+    if (busy || reading) return;
     const f = new FormData(e.currentTarget),
       portfolio = String(f.get('portfolio') || '').trim();
     setBusy(true);
@@ -92,7 +71,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] [background:#fafafa]
           rounded-[16px] items-center gap-6 m-[20px_0] p-5 flex
           max-[600px]:gap-[15px]
-          max-[600px]:p-[15px] [&_p]:m-[4px_0] profile-photo-editor`}
+          max-[600px]:p-[15px] max-[400px]:flex-col max-[400px]:items-start [&_p]:m-[4px_0] profile-photo-editor`}
         >
           <div
             className={`text-[#8b5ad1] [background:#efeef1] rounded-full shrink-0 [place-items:center] w-22.5 h-22.5
@@ -102,7 +81,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           >
             <Avatar user={{ ...user, photo }} />
           </div>
-          <div>
+          <div className="w-full min-w-0 flex-1">
             <strong>프로필 사진</strong>
             <p
               className={`text-muted text-[12px]
@@ -111,22 +90,36 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           [.original-programs_&]:m-[0]
           [.original-programs_&]:text-[12px] muted`}
             >
-              JPG·PNG·WEBP / 최대 1MB
+              JPG·PNG·WEBP / 최대 10MB · 선택하면 자동으로 크기를 줄여요.
             </p>
-            <label
-              className={`text-[#743ac8] cursor-pointer bg-white [border-width:1px] [border-style:solid] [border-color:#e2e1e4]
-          rounded-[8px] mt-1.5 p-[7px_12px] text-[12px] inline-block [&_input]:opacity-[0] [&_input]:w-[1px]
-          [&_input]:h-[1px] [&_input]:p-[0] [&_input]:absolute [&:focus-within]:outline-offset-[3px]
-          [&:focus-within]:[outline:2px_solid_#a17ada] photo-upload`}
-            >
-              사진 선택
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                onChange={(e) => readPhoto(e.target.files[0])}
-              />
-            </label>
-            <Action onClick={() => setPhoto('')}>사진 삭제</Action>
+            <div className="mt-3 grid w-full max-w-[260px] grid-cols-2 gap-2">
+              <label className="m-0 inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl border border-solid border-brand/25 bg-white px-3 py-2 text-xs font-semibold leading-5 text-brand transition-colors hover:border-brand hover:bg-brand/5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand">
+                {reading ? '사진 처리 중…' : '사진 선택'}
+                <input
+                  type="file"
+                  className="sr-only"
+                  accept={PROFILE_PHOTO_ACCEPT}
+                  aria-label="프로필 사진 선택"
+                  disabled={busy || reading}
+                  onChange={(e) => {
+                    readPhoto(e.target.files[0]);
+                    e.target.value = '';
+                  }}
+                />
+              </label>
+              <button
+                type="button"
+                className="inline-flex min-h-10 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-3 py-2 text-xs font-semibold leading-5 text-muted hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink"
+                onClick={() => {
+                  setPhoto('');
+                  setPhotoError('');
+                }}
+                disabled={busy || reading || !photo}
+              >
+                사진 삭제
+              </button>
+            </div>
+            <ErrorText message={photoError} />
           </div>
         </section>
         <div

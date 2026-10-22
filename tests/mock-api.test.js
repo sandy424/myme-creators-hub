@@ -41,7 +41,22 @@ test('empty initial data, signup and login, shared UI fixtures, nested replies, 
     title: '공유 글',
     body: '본문',
     category: '자유게시판',
+    relatedUrl: '  https://example.test/shared-file.pdf  ',
+    attachments: [
+      { name: 'readme.txt', size: 5, dataUrl: 'data:application/octet-stream;base64,aGVsbG8=' },
+    ],
   });
+  assert.equal(
+    (await mockApi('community')).posts[0].relatedUrl,
+    'https://example.test/shared-file.pdf',
+  );
+  for (const relatedUrl of ['http://example.test/file', 'javascript:alert(1)', '잘못된 주소']) {
+    await assert.rejects(
+      () => mockApi('publish-post', { title: '제목', body: '본문', relatedUrl }),
+      /https:\/\//,
+    );
+  }
+  assert.equal((await mockApi('community')).posts.length, 1);
   const project = await mockApi('save-project', {
     title: '공유 프로젝트',
     summary: '소개',
@@ -52,6 +67,10 @@ test('empty initial data, signup and login, shared UI fixtures, nested replies, 
   const feedB = await mockApi('community');
   assert.equal(feedB.members[0].name, 'A');
   assert.equal(feedB.posts[0].title, '공유 글');
+  assert.equal(feedB.posts[0].relatedUrl, 'https://example.test/shared-file.pdf');
+  assert.deepEqual(feedB.posts[0].attachments, [
+    { name: 'readme.txt', size: 5, dataUrl: 'data:application/octet-stream;base64,aGVsbG8=' },
+  ]);
   assert(!JSON.stringify(feedB.members).includes('a@example.test'));
   await assert.rejects(
     () => mockApi('save-project', { id: project.id, title: '탈취', summary: 'X', links: [] }),

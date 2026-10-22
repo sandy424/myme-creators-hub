@@ -4,7 +4,7 @@ import { resetMockData, STORAGE_KEY } from './mock/api';
 import { HubContext } from './HubContext';
 import { Avatar, Icon, Modal, Action } from './components/UI';
 import AuthDialog from './components/AuthDialog';
-import ProfileDialog, { PublicProfile } from './components/ProfileDialog';
+import ProfileDialog, { PublicProfile } from './components/Profile';
 import ChatDialog from './components/ChatDialog';
 import ActivityDialog from './components/ActivityDialog';
 import Home from './pages/Home';
@@ -193,7 +193,7 @@ export default function App() {
       </div>
     );
   else if (route[0] === 'board') page = <Board category={route[1] || '전체'} />;
-  else if (route[0] === 'write') page = <WritePost />;
+  else if (route[0] === 'write') page = <WritePost key={route[1] || '전체'} category={route[1]} />;
   else if (route[0] === 'post') page = <PostDetail id={route[1]} />;
   else if (route[0] === 'members') page = <Members />;
   else if (route[0] === 'team') page = <Team />;
@@ -206,17 +206,9 @@ export default function App() {
       <header
         className={`[z-index:40] [backdrop-filter:blur(12px)] [border-bottom-width:1px] [border-bottom-style:solid]
           [border-bottom-color:#e9e7eb] [border-color:var(--color-line)] [background:#faf9fb]
-          [justify-content:space-between] [align-items:center] [gap:25px] [max-width:1260px] [height:98px]
-          [margin:auto] [padding:0_40px] [display:flex] [position:sticky] [top:0]
+          w-full [position:sticky] [top:0]
           [box-shadow:0_1px_8px_#1a0f2a04]
-          max-[900px]:[gap:15px]
-          max-[900px]:[padding:0_25px]
-          max-[760px]:[flex-wrap:wrap]
-          max-[760px]:[min-height:74px]
-          max-[650px]:[gap:14px]
-          max-[650px]:[height:auto]
-          max-[650px]:[min-height:90px]
-          max-[650px]:[padding:18px_20px] [&_nav_a]:[white-space:nowrap] [&_nav_a]:[justify-content:center]
+          [&_nav_a]:[white-space:nowrap] [&_nav_a]:[justify-content:center]
           [&_nav_a]:[align-items:center] [&_nav_a]:[gap:8px] [&_nav_a]:[display:inline-flex]
           [&_nav_a]:[position:relative]
           max-[650px]:[&_nav_a]:[padding:4px_15px] [&_nav_a_img]:[object-fit:contain]
@@ -230,24 +222,27 @@ export default function App() {
           max-[650px]:[&_nav]:[width:100%]
           max-[650px]:[&_nav]:[padding-top:12px]`}
       >
-        <a
-          className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[850] leading-[1.3] flex
+        <div className="mx-auto flex h-[98px] w-full max-w-[1260px] items-center justify-between gap-[25px] px-10 max-[900px]:gap-[15px] max-[900px]:px-[25px] max-[760px]:min-h-[74px] max-[760px]:flex-wrap max-[650px]:h-auto max-[650px]:min-h-[90px] max-[650px]:gap-3.5 max-[650px]:px-5 max-[650px]:py-[18px]">
+          <a
+            className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[850] leading-[1.3] flex
           max-[900px]:text-[15px]
           max-[650px]:text-[14px] [&_em]:text-brand [&_em]:not-italic [&_small]:tracking-[2px]
           [&_small]:text-muted [&_small]:mt-[5px] [&_small]:text-[8px] [&_small]:block
           max-[650px]:[&_small]:text-[7px] [footer_&]:text-[#8d819e] [footer_&]:text-[14px] brand`}
-          href="#home"
-        >
-          <b aria-hidden="true">
-            <img src="/assets/logo.png" alt="MYME Creators Hub" width="50" height="50" />
-          </b>
-          <span>
-            MYME <br />
-            <em>Creators Hub</em>
-          </span>
-        </a>
-        <nav
-          className={`[background:#f5f4f6] [border-width:1px] [border-style:solid] [border-color:#e9e7eb]
+            href="#home"
+          >
+            <b aria-hidden="true">
+              <img src="/assets/logo.png" alt="MYME Creators Hub" width="50" height="50" />
+            </b>
+            <span className="flex flex-col items-center gap-1 text-center">
+              <span className="block text-[24px]">MYME</span>
+              <em className="block text-[14px] max-[900px]:text-[12px] max-[650px]:text-[11px]">
+                CREATORS HUB
+              </em>
+            </span>
+          </a>
+          <nav
+            className={`[background:#f5f4f6] [border-width:1px] [border-style:solid] [border-color:#e9e7eb]
           [border-radius:16px] [gap:5px] [padding:5px] [font-size:13px] [font-weight:700] [display:flex]
           [box-shadow:inset_0_2px_4px_#1a0f2a04]
           max-[900px]:[gap:18px]
@@ -262,70 +257,70 @@ export default function App() {
           max-[760px]:[&_a]:[flex:1]
           max-[760px]:[&_a]:[padding:9px_15px]
           max-[760px]:[&_a]:[font-size:12px] [&_a_span]:[margin-right:7px]`}
-          aria-label="주 메뉴"
-        >
-          <a
-            className={
-              !['team', 'projects'].includes(route[0])
-                ? `[nav_a&]:text-white [nav_a&]:[background:linear-gradient(135deg,#8b5ad1,#743ac8)]
+            aria-label="주 메뉴"
+          >
+            <a
+              className={
+                !['team', 'projects'].includes(route[0])
+                  ? `[nav_a&]:text-white [nav_a&]:[background:linear-gradient(135deg,#8b5ad1,#743ac8)]
           [nav_a&]:shadow-[0_4px_14px_#8b5ad135]
           [.tabs_button&]:text-[#743ac8]
           [.tabs_button&]:[background:#f6f6f7]
           [.tabs_button&]:[border-color:#e2e1e4] [header_nav_a&]:[background:#29252f]
           [header_nav_a&]:shadow-[0_4px_12px_#25232918] active`
-                : ''
-            }
-            href="#home"
-          >
-            <img src="/assets/home.png" alt="" aria-hidden="true" width="20" height="20" />
-            메인
-          </a>
-          <a
-            className={
-              ['team', 'projects'].includes(route[0])
-                ? `[nav_a&]:text-white [nav_a&]:[background:linear-gradient(135deg,#8b5ad1,#743ac8)]
+                  : ''
+              }
+              href="#home"
+            >
+              <img src="/assets/home.png" alt="" aria-hidden="true" width="20" height="20" />
+              메인
+            </a>
+            <a
+              className={
+                ['team', 'projects'].includes(route[0])
+                  ? `[nav_a&]:text-white [nav_a&]:[background:linear-gradient(135deg,#8b5ad1,#743ac8)]
           [nav_a&]:shadow-[0_4px_14px_#8b5ad135]
           [.tabs_button&]:text-[#743ac8]
           [.tabs_button&]:[background:#f6f6f7]
           [.tabs_button&]:[border-color:#e2e1e4] [header_nav_a&]:[background:#29252f]
           [header_nav_a&]:shadow-[0_4px_12px_#25232918] active`
-                : ''
-            }
-            href="#team"
-          >
-            <img src="/assets/team.png" alt="" aria-hidden="true" width="20" height="20" />
-            팀협업
-          </a>
-        </nav>
-        <div
-          className={`items-center gap-5 flex
+                  : ''
+              }
+              href="#team"
+            >
+              <img src="/assets/team.png" alt="" aria-hidden="true" width="20" height="20" />
+              팀협업
+            </a>
+          </nav>
+          <div
+            className={`items-center gap-5 flex
           max-[760px]:ml-auto [&_button]:[background:0_0] [&_button]:[border-width:0]
           [&_button]:[border-style:none] [&_button]:[border-color:currentColor] [&_button]:p-[5px]
           [&_button]:text-[24px] [&_button]:relative [&_i]:text-white [&_i]:[background:#ac8ade]
           [&_i]:rounded-full [&_i]:min-w-[15px] [&_i]:text-[9px] [&_i]:not-italic [&_i]:absolute [&_i]:top-[0]
           [&_i]:right-[-3px] utilities`}
-        >
-          <button
-            id="bell"
-            aria-label="알림 열기"
-            onClick={() => requireUser(() => open('notices'))}
           >
-            <svg
-              width="23"
-              height="23"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              aria-hidden="true"
+            <button
+              id="bell"
+              aria-label="알림 열기"
+              onClick={() => requireUser(() => open('notices'))}
             >
-              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
-            </svg>
-            <i>{state.notices.filter((n) => !n.read).length}</i>
-          </button>
-          <div
-            id="account"
-            className={`flex-wrap
+              <svg
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                aria-hidden="true"
+              >
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+              </svg>
+              <i>{state.notices.filter((n) => !n.read).length}</i>
+            </button>
+            <div
+              id="account"
+              className={`flex-wrap
           [.original-boards_&]:grid-cols-[repeat(auto-fit,minmax(125px,1fr))]
           [.original-boards_&]:gap-2.5
           [.original-boards_&]:mt-4.5
@@ -334,12 +329,12 @@ export default function App() {
           [.original-welcome_&]:gap-2 actions items-center gap-2 flex
           max-[600px]:[&_button]:p-2
           max-[600px]:[&_button]:text-[12px]`}
-            aria-label="내 계정"
-          >
-            {user ? (
-              <>
-                <button
-                  className={`text-[#8b5ad1] rounded-full [place-items:center] w-[37px] h-[37px] grid [background:#efeef1]!
+              aria-label="내 계정"
+            >
+              {user ? (
+                <>
+                  <button
+                    className={`text-[#8b5ad1] rounded-full [place-items:center] w-[37px] h-[37px] grid [background:#efeef1]!
           text-[14px]!
           [.membercard_&]:w-[65px]
           [.membercard_&]:h-[65px]
@@ -365,11 +360,25 @@ export default function App() {
           [.profile-photo-preview_&_img]:w-full
           [.profile-photo-preview_&_img]:h-full [#account_>_.avatar_>_&]:rounded-[inherit]
           [#account_>_.avatar_>_&]:w-full [#account_>_.avatar_>_&]:h-full avatar`}
-                  aria-label="내 계정"
-                  onClick={() => open('account')}
-                >
-                  <Avatar user={user} />
-                </button>
+                    aria-label="내 계정"
+                    onClick={() => open('account')}
+                  >
+                    <Avatar user={user} />
+                  </button>
+                  <button
+                    className={`[#account_&]:text-white [#account_&]:whitespace-nowrap [#account_&]:bg-brand
+          [#account_&]:[border:0_#0000] [#account_&]:rounded-[12px] [#account_&]:items-center
+          [#account_&]:gap-[5px] [#account_&]:p-[7px_13px] [#account_&]:text-[12px] [#account_&]:font-[800]
+          [#account_&]:leading-[1.2] [#account_&]:inline-flex [#account_&:hover]:text-white
+          [#account_&:hover]:[background:#6e43c5] [#account_&_svg]:w-[13px] [#account_&_svg]:h-[13px]
+          focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_#b697e2] auth-entry`}
+                    onClick={logout}
+                  >
+                    <Icon name="enter" />
+                    로그아웃
+                  </button>
+                </>
+              ) : (
                 <button
                   className={`[#account_&]:text-white [#account_&]:whitespace-nowrap [#account_&]:bg-brand
           [#account_&]:[border:0_#0000] [#account_&]:rounded-[12px] [#account_&]:items-center
@@ -377,26 +386,13 @@ export default function App() {
           [#account_&]:leading-[1.2] [#account_&]:inline-flex [#account_&:hover]:text-white
           [#account_&:hover]:[background:#6e43c5] [#account_&_svg]:w-[13px] [#account_&_svg]:h-[13px]
           focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_#b697e2] auth-entry`}
-                  onClick={logout}
+                  onClick={() => open('auth')}
                 >
                   <Icon name="enter" />
-                  로그아웃
+                  로그인 / 가입
                 </button>
-              </>
-            ) : (
-              <button
-                className={`[#account_&]:text-white [#account_&]:whitespace-nowrap [#account_&]:bg-brand
-          [#account_&]:[border:0_#0000] [#account_&]:rounded-[12px] [#account_&]:items-center
-          [#account_&]:gap-[5px] [#account_&]:p-[7px_13px] [#account_&]:text-[12px] [#account_&]:font-[800]
-          [#account_&]:leading-[1.2] [#account_&]:inline-flex [#account_&:hover]:text-white
-          [#account_&:hover]:[background:#6e43c5] [#account_&_svg]:w-[13px] [#account_&_svg]:h-[13px]
-          focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_#b697e2] auth-entry`}
-                onClick={() => open('auth')}
-              >
-                <Icon name="enter" />
-                로그인 / 가입
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -427,7 +423,7 @@ export default function App() {
       </button>
       <footer
         className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] [color:#a49caf]
-          [background:#eae8ed] [border-color:#dedbe2] [max-width:1150px] [margin:auto] [padding:32px_6%]
+          [background:#eae8ed] [border-color:#dedbe2] w-full [padding:32px_6%]
           max-[650px]:[padding:32px_6%_85px] [&_p]:[color:#a39bae] [&_p]:[font-size:11px]
           [&_small]:[color:#a39bae] [&_small]:[font-size:11px]`}
       >
