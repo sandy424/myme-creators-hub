@@ -1,9 +1,11 @@
 import { normalizeHttpsLink } from '../links.js';
 import { validateAttachments } from '../attachments.js';
+import { buildNotices } from './notices.js';
 
 // Browser-local UI adapter. No real backend is needed, and no data is pre-seeded.
 // This is not production authentication. Use fictitious test credentials only.
 export const STORAGE_KEY = 'myme-react-ui-v1';
+export const SESSION_KEY = 'myme-react-session-v1';
 const fresh = () => ({
   accounts: [],
   entities: [],
@@ -22,6 +24,26 @@ const read = () => {
   }
 };
 const write = (db) => localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+function currentSession(db) {
+  if (typeof sessionStorage === 'undefined') return db.session;
+  const session = sessionStorage.getItem(SESSION_KEY);
+  if (session !== null) return session;
+  // Preserve an existing login once when upgrading from the shared-tab session.
+  const legacySession = db.session;
+  sessionStorage.setItem(SESSION_KEY, legacySession || '');
+  if (legacySession) {
+    db.session = null;
+    write(db);
+  }
+  return legacySession;
+}
+function setSession(db, id) {
+  if (typeof sessionStorage === 'undefined') db.session = id;
+  else {
+    sessionStorage.setItem(SESSION_KEY, id || '');
+    db.session = null;
+  }
+}
 const blank = () => ({
   posts: [],
   members: [],
@@ -42,6 +64,7 @@ const fail = (message) => {
 };
 export function resetMockData() {
   localStorage.removeItem(STORAGE_KEY);
+  if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(SESSION_KEY, '');
 }
 function publicMember(a) {
   const p = a.profile,
@@ -65,12 +88,21 @@ function publicMember(a) {
   };
 }
 export async function mockApi(action, body) {
+  // Serialize browser-tab writes so a login or read receipt cannot overwrite a new message.
+  if (typeof navigator !== 'undefined' && navigator.locks?.request) {
+    return navigator.locks.request(STORAGE_KEY, () => runMockApi(action, body));
+  }
+  return runMockApi(action, body);
+}
+
+async function runMockApi(action, body) {
   const db = read(),
-    me = db.accounts.find((a) => a.id === db.session);
+    session = currentSession(db),
+    me = db.accounts.find((a) => a.id === session);
   if (action === 'me')
     return me ? clone({ id: me.id, profile: me.profile, state: me.state }) : { id: null };
   if (action === 'logout') {
-    db.session = null;
+    setSession(db, null);
     write(db);
     return { ok: true };
   }
@@ -122,7 +154,7 @@ export async function mockApi(action, body) {
       db.accounts.push(a);
     } else if (!a || a.passwordHash !== (await digest(a.salt + password)))
       fail('이메일 또는 비밀번호를 확인해 주세요.');
-    db.session = a.id;
+    setSession(db, a.id);
     write(db);
     return clone({ id: a.id, profile: a.profile, state: a.state });
   }
@@ -198,16 +230,21 @@ export async function mockApi(action, body) {
       posts,
       projects,
       chats,
-      notices: members
-        .filter((m) => m.incoming)
-        .map((m) => ({
-          text: m.name + '님이 동료 요청을 보냈습니다.',
-          sub: '동료 요청',
-          route: '#members',
-          read: false,
-        })),
+      notices: buildNotices(db, me),
       selfId: me.memberId,
     });
+  }
+  if (action === 'read-notices') {
+    if (!Array.isArray(body?.ids)) fail('읽을 알림을 확인해 주세요.');
+    const owned = new Set(buildNotices(db, me).map((notice) => notice.id));
+    const readIds = new Set(me.state.readNoticeIds || []);
+    const previousCount = readIds.size;
+    for (const id of body.ids) if (owned.has(id)) readIds.add(id);
+    if (readIds.size !== previousCount) {
+      me.state.readNoticeIds = [...readIds];
+      write(db);
+    }
+    return { ok: true };
   }
   if (action === 'state') {
     const p = body.state.user || me.profile;
@@ -289,6 +326,7 @@ export async function mockApi(action, body) {
         text: body.text,
         parent: target ? target.parent || target.id : null,
         replyTo: target?.id || null,
+        created: new Date().toISOString(),
       });
     }
     write(db);
@@ -315,13 +353,22 @@ export async function mockApi(action, body) {
       c = db.connections.find((c) => c.key === key);
     if (body.operation === 'request') {
       if (c) fail('이미 요청하거나 연결된 회원입니다.');
-      db.connections.push({ key, sender: me.id, receiver: p.id, status: 'pending' });
+      db.connections.push({
+        id: db.nextId++,
+        key,
+        sender: me.id,
+        receiver: p.id,
+        status: 'pending',
+        created: new Date().toISOString(),
+      });
     } else if (body.operation === 'cancel') {
       if (!c || c.sender !== me.id || c.status !== 'pending') fail('취소할 요청이 없습니다.');
       db.connections = db.connections.filter((c) => c.key !== key);
     } else if (body.operation === 'accept') {
       if (!c || c.receiver !== me.id || c.status !== 'pending') fail('수락할 요청이 없습니다.');
       c.status = 'accepted';
+      c.acceptedAt = new Date().toISOString();
+      c.acceptedOrder = db.nextId++;
     } else fail('요청을 확인해 주세요.');
     write(db);
     return { ok: true };

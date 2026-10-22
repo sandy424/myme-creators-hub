@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useHub } from '../HubContext';
 import { Modal, Avatar, ErrorText } from './UI';
 import { languages } from '../api';
+import { useReadNotices } from '../useReadNotices';
 export default function ChatDialog({ initialId, onClose }) {
   const { state, action } = useHub(),
     [selected, setSelected] = useState(initialId),
@@ -17,6 +18,11 @@ export default function ChatDialog({ initialId, onClose }) {
     ),
     peer = state.members.find((m) => m.id === Number(selected)) || peers[0],
     messages = peer ? state.chats[peer.id] || [] : [];
+  useReadNotices(
+    state.notices
+      .filter((notice) => !notice.read && notice.type === 'message' && notice.peerId === peer?.id)
+      .map((notice) => notice.id),
+  );
   async function submit(e) {
     e.preventDefault();
     setBusy(true);

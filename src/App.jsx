@@ -7,6 +7,7 @@ import AuthDialog from './components/AuthDialog';
 import ProfileDialog, { PublicProfile } from './components/Profile';
 import ChatDialog from './components/ChatDialog';
 import ActivityDialog from './components/ActivityDialog';
+import NoticesDialog from './components/NoticesDialog';
 import Home from './pages/Home';
 import { Board, WritePost, PostDetail } from './pages/Community';
 import Members from './pages/Members';
@@ -26,8 +27,7 @@ export default function App() {
     [route, setRoute] = useState(readRoute),
     [modal, setModal] = useState(null),
     [toast, setToast] = useState(''),
-    [loading, setLoading] = useState(true),
-    [readNotices, setReadNotices] = useState(() => new Set());
+    [loading, setLoading] = useState(true);
   const requestId = useRef(0),
     stateRef = useRef(null),
     userRef = useRef(null),
@@ -43,6 +43,7 @@ export default function App() {
     let next = emptyShared();
     if (me.id) next = await api('community');
     if (version !== requestId.current) return;
+    if (userRef.current?.id !== me.profile?.id) setModal(null);
     setUser(me.id ? me.profile : null);
     userRef.current = me.id ? me.profile : null;
     setPrivateData(me.id ? { ...emptyState(), ...me.state } : emptyState());
@@ -63,12 +64,19 @@ export default function App() {
     };
     window.addEventListener('hashchange', onHash);
     window.addEventListener('storage', onStorage);
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') refresh().catch((err) => notify(err.message));
+    };
+    window.addEventListener('focus', onVisible);
+    document.addEventListener('visibilitychange', onVisible);
     const timer = setInterval(() => {
       if (userRef.current && document.visibilityState !== 'hidden') refresh().catch(() => {});
     }, 4000);
     return () => {
       window.removeEventListener('hashchange', onHash);
       window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', onVisible);
+      document.removeEventListener('visibilitychange', onVisible);
       clearInterval(timer);
       clearTimeout(toastTimer.current);
     };
@@ -79,7 +87,7 @@ export default function App() {
     ...shared,
     career: privateData.career || [],
     pointHistory: privateData.pointHistory || [],
-    notices: shared.notices.map((n) => ({ ...n, read: readNotices.has(n.text) })),
+    notices: shared.notices,
   };
   stateRef.current = state;
   const open = (type, props = {}) => setModal({ type, ...props }),
@@ -97,6 +105,14 @@ export default function App() {
     await refresh();
     return result;
   }
+  const markNoticesRead = useCallback(
+    async (ids) => {
+      if (!ids.length) return;
+      await api('read-notices', { ids });
+      await refresh();
+    },
+    [refresh],
+  );
   async function savePrivate(values) {
     await api('state', {
       state: { ...stateRef.current, ...values, user: values.user || userRef.current },
@@ -140,6 +156,7 @@ export default function App() {
     savePrivate,
     connect,
     notify,
+    markNoticesRead,
   };
   let page;
   if (loading)
@@ -514,46 +531,13 @@ export default function App() {
         </Modal>
       )}
       {modal?.type === 'notices' && (
-        <Modal title="알림" onClose={close}>
-          <Action onClick={() => setReadNotices(new Set(state.notices.map((n) => n.text)))}>
-            모두 읽음
-          </Action>
-          {state.notices.map((n, i) => (
-            <button
-              className={`[border-bottom-width:1px] [border-bottom-style:solid] [border-bottom-color:var(--color-line)]
-          p-[17px_0] text-[13px] [&_small]:text-muted [&_small]:text-[11px] [&_small]:block text-left
-          [background:0_0] [border-width:0_0_1px] rounded-[0] w-full block notice notice-item`}
-              key={n.text + i}
-              onClick={() => {
-                setReadNotices((old) => new Set([...old, n.text]));
-                navigate(n.route);
-              }}
-            >
-              <strong>
-                {n.read ? '' : '● '}
-                {n.text}
-              </strong>
-              <small>{n.sub}</small>
-            </button>
-          ))}
-          {!state.notices.length && (
-            <p
-              className={`text-center text-muted p-[35px]
-          [.original-columns_&]:text-[#9c93a9]
-          [.original-columns_&]:[background:#fbfbfb]
-          [.original-columns_&]:[border-width:1px]
-          [.original-columns_&]:[border-style:dashed]
-          [.original-columns_&]:[border-color:#e9e8eb]
-          [.original-columns_&]:rounded-[13px]
-          [.original-columns_&]:m-[0_0_18px]
-          [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
-          [.original-columns_&]:leading-[1.9] empty`}
-            >
-              새 알림이 없습니다.
-            </p>
-          )}
-        </Modal>
+        <NoticesDialog
+          onClose={close}
+          onOpen={(notice) => {
+            if (notice.type === 'message') open('chat', { id: notice.peerId });
+            else navigate(notice.route);
+          }}
+        />
       )}
     </HubContext.Provider>
   );

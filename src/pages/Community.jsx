@@ -5,6 +5,7 @@ import { Tag, Avatar, Action, ErrorText } from '../components/UI';
 import { normalizeHttpsLink } from '../links';
 import { AttachmentPicker, AttachmentDownloads } from '../components/Attachments';
 import { validateAttachments } from '../attachments';
+import { useReadNotices } from '../useReadNotices';
 
 const writableCategories = categories.filter(
   (category) => !['전체', '공지·운영 안내'].includes(category),
@@ -316,11 +317,11 @@ function ReplyForm({ postId, target, onDone }) {
       <div
         className={`justify-end gap-2 flex
           max-[600px]:flex-wrap [&_button]:p-[8px_13px] [&_button]:text-[12px]
-          [.replyform_&_button]:mt-[0] reply-actions`}
+          [.replyform_&_button]:mt-[8px] reply-actions`}
       >
         <button
           type="submit"
-          className={`bg-brand text-white [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
+          className={`bg-brand text-white mt-[8px] [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
           hover:[background:#7942c7]
           [.original-columns_&]:text-[#8463b4]
           [.original-columns_&]:[background:#f3f3f4]
@@ -400,6 +401,11 @@ function Comment({ comment, postId, nested = false }) {
 export function PostDetail({ id }) {
   const { state, action, notify } = useHub();
   const p = state.posts.find((p) => p.id === Number(id));
+  useReadNotices(
+    state.notices
+      .filter((notice) => !notice.read && notice.route === '#post/' + Number(id))
+      .map((notice) => notice.id),
+  );
   let relatedUrl = '';
   try {
     relatedUrl = normalizeHttpsLink(p?.relatedUrl);
