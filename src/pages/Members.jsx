@@ -13,13 +13,13 @@ export default function Members() {
   return (
     <>
       <p
-        className={`tracking-[1.6px] text-[#8665b5] text-[11px] font-[800]
+        className={`tracking-[1.6px] text-[#8665b5] text-[14px] font-[600]
           [.original-welcome_&]:text-[#bbb2c9]
           [.original-welcome_&]:tracking-[1.7px]
           [.original-welcome_&]:m-[0_0_20px]
-          [.original-welcome_&]:text-[10px]
+          [.original-welcome_&]:text-[12px]
           max-[650px]:[.original-welcome_&]:tracking-[1px]
-          max-[650px]:[.original-welcome_&]:text-[9px] eyebrow`}
+          max-[650px]:[.original-welcome_&]:text-[12px] eyebrow`}
       >
         FIND YOUR PEOPLE
       </p>
@@ -28,14 +28,14 @@ export default function Members() {
       >
         다음 게임을 함께 만들 동료
       </h1>
-      <p className={'text-muted mt-[0] text-[13px] intro'}>
+      <p className={'text-muted mt-[0] text-[16px] intro'}>
         프로필 공개를 선택한 크리에이터를 만나 보세요.
       </p>
       {state.members.some((m) => m.incoming) && (
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -47,12 +47,12 @@ export default function Members() {
               <div
                 className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]
-          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[12px]
+          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[16px]
           [.project-workspaces_&]:items-center
           max-[760px]:[.project-workspaces_&]:flex-wrap
           max-[760px]:[.project-workspaces_&]:items-start
           [.original-columns_&_h2]:m-[0]
-          [.original-columns_&_h2]:text-[17px]
+          [.original-columns_&_h2]:text-[20px]
           [.original-columns_&]:mb-5 sectionhead`}
                 key={m.id}
               >
@@ -71,7 +71,7 @@ export default function Members() {
       >
         <div
           className={`flex-wrap gap-[7px] m-[18px_0] flex [&_button]:bg-white [&_button]:rounded-[20px]
-          [&_button]:p-[7px_15px] [&_button]:text-[12px] tabs`}
+          [&_button]:p-[7px_15px] [&_button]:text-[16px] tabs`}
         >
           {['전체', '내 동료', '요청 중'].map((f) => (
             <button
@@ -116,11 +116,11 @@ export default function Members() {
           <article
             className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
-          [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center [&_h3]:m-2 [&_p]:text-muted [&_p]:text-[12px]
-          [&_button]:mt-4 [&_button]:text-[12px] panel membercard`}
+          [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center [&_h3]:m-2 [&_p]:text-muted [&_p]:text-[16px]
+          [&_button]:mt-4 [&_button]:text-[16px] panel membercard`}
             key={m.id}
           >
             <button
@@ -132,7 +132,7 @@ export default function Members() {
               <span
                 className={
                   `text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag ` +
@@ -153,22 +153,22 @@ export default function Members() {
                   </>
                 )}
               </p>
-              <span className={'text-[#a17ada] text-[10px] profile-open-label'}>프로필 보기 ↗</span>
+              <span className={'text-[#a17ada] text-[12px] profile-open-label'}>프로필 보기 ↗</span>
             </button>
             <div
               className={`flex-col gap-2 mt-[15px] flex
-          [.membercard_&_button]:m-[0] [&_button]:text-[12px] member-card-actions`}
+          [.membercard_&_button]:m-[0] [&_button]:text-[16px] member-card-actions`}
             >
               <Action primary onClick={() => open('chat', { id: m.id })}>
                 메시지 보내기
               </Action>
               {m.status === '동료' ? (
                 <span
-                  className={`text-muted text-[12px]
+                  className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
                 >
                   ✓ 연결된 동료
                 </span>
@@ -189,7 +189,7 @@ export default function Members() {
         <div
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -201,7 +201,7 @@ export default function Members() {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
         >
           해당하는 동료가 없습니다. 다른 계정에서 프로필 공개를 켜면 표시됩니다.

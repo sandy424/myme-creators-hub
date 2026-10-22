@@ -60,11 +60,11 @@ export default function ProfileDialog({ user, onClose, onSave }) {
       onClose={onClose}
     >
       <p
-        className={`text-muted text-[12px]
+        className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
       >
         나를 소개하고 함께할 동료에게 작품을 보여 주세요.
       </p>
@@ -86,16 +86,16 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           <div className="w-full min-w-0 flex-1">
             <strong>프로필 사진</strong>
             <p
-              className={`text-muted text-[12px]
+              className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
             >
               JPG·PNG·WEBP / 최대 10MB · 선택하면 자동으로 크기를 줄여요.
             </p>
             <div className="mt-3 grid w-full max-w-[260px] grid-cols-2 gap-2">
-              <label className="m-0 inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl border border-solid border-brand/25 bg-white px-3 py-2 text-xs font-semibold leading-5 text-brand transition-colors hover:border-brand hover:bg-brand/5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand">
+              <label className="m-0 inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl border border-solid border-brand/25 bg-white px-3 py-2 text-sm font-semibold leading-5 text-brand transition-colors hover:border-brand hover:bg-brand/5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand">
                 {reading ? '사진 처리 중…' : '사진 선택'}
                 <input
                   type="file"
@@ -111,7 +111,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
               </label>
               <button
                 type="button"
-                className="inline-flex min-h-10 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-3 py-2 text-xs font-semibold leading-5 text-muted hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink"
+                className="inline-flex min-h-10 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-3 py-2 text-sm font-semibold leading-5 text-muted hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink"
                 onClick={() => {
                   setPhoto('');
                   setPhotoError('');
@@ -177,30 +177,30 @@ export default function ProfileDialog({ user, onClose, onSave }) {
             ))}
           </select>
         </label>
-        <p id="chat-language-help" className="mt-2 text-xs leading-relaxed text-muted">
+        <p id="chat-language-help" className="mt-2 text-sm leading-relaxed text-muted">
           채팅에서 받은 메시지를 이 언어로 자동 번역합니다.
         </p>
         <Check name="sharedDiscovery" defaultChecked={user.sharedDiscovery}>
           다른 로그인 회원의 동료 찾기에 내 프로필 공개
         </Check>
         <p
-          className={`text-muted text-[12px]
+          className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
         >
           공개 시 닉네임·전문 분야와 아래에서 선택한 항목만 표시됩니다. 이메일·행사·기수는 공개되지
           않습니다.
         </p>
         <fieldset
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] rounded-[12px] m-[22px_0]
-          p-[15px] [&_legend]:text-[13px] [&_legend]:font-[750] profile-disclosure`}
+          p-[15px] [&_legend]:text-[16px] [&_legend]:font-[750] profile-disclosure`}
         >
           <legend>다른 회원에게 공개할 정보</legend>
           <div
             className={`grid-cols-[1fr_1fr] gap-2 grid [&_label]:[background:#fafafa] [&_label]:rounded-[7px]
-          [&_label]:items-center [&_label]:gap-2 [&_label]:m-[0] [&_label]:p-2 [&_label]:text-[12px]
+          [&_label]:items-center [&_label]:gap-2 [&_label]:m-[0] [&_label]:p-2 [&_label]:text-[16px]
           [&_label]:flex [&_input]:[accent-color:#8b5ad1] [&_input]:w-[15px] [&_input]:h-[15px] [&_input]:m-[0]
           disclosure-options`}
           >
@@ -228,12 +228,12 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[7px_13px]
-          [.original-columns_&]:text-[13px]
+          [.original-columns_&]:text-[16px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand
@@ -283,7 +283,7 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
             <span
               className={`bg-white [border-width:2px] [border-style:solid] [border-color:#e9e7eb] rounded-full
           [place-items:center]
-          min-w-7.5 h-7.5 p-1 text-[10px] grid absolute bottom-[0] right-[0] public-country`}
+          min-w-7.5 h-7.5 p-1 text-[12px] grid absolute bottom-[0] right-[0] public-country`}
             >
               {member.country === '대한민국' ? 'KR' : member.country.slice(0, 2)}
             </span>
@@ -298,7 +298,7 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
           {member.status && (
             <span
               className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
@@ -308,11 +308,11 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
           )}
         </div>
         <div
-          className={'text-[#746788] flex-wrap items-center gap-[9px] text-[11px] flex public-meta'}
+          className={'text-[#746788] flex-wrap items-center gap-[9px] text-[14px] flex public-meta'}
         >
           <span
             className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
@@ -323,8 +323,8 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
         </div>
         {member.bio && (
           <section
-            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[12px] [&_>_p]:whitespace-pre-wrap
-          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[13px] [&_>_p]:leading-[1.9]
+            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[16px] [&_>_p]:whitespace-pre-wrap
+          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[16px] [&_>_p]:leading-[1.9]
           public-section`}
           >
             <h3>소개</h3>
@@ -333,8 +333,8 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
         )}
         {member.portfolios?.length > 0 && (
           <section
-            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[12px] [&_>_p]:whitespace-pre-wrap
-          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[13px] [&_>_p]:leading-[1.9]
+            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[16px] [&_>_p]:whitespace-pre-wrap
+          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[16px] [&_>_p]:leading-[1.9]
           public-section`}
           >
             <h3>포트폴리오</h3>
@@ -344,8 +344,8 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
                   <a
                     key={i}
                     className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] rounded-[12px] items-center
-          gap-[13px] mt-2 p-[12px_14px] text-[12px] flex [&_>_span:last-child]:text-[#746788]
-          [&_>_span:last-child]:ml-auto [&_strong]:block [&_small]:text-[#746788] [&_small]:text-[10px]
+          gap-[13px] mt-2 p-[12px_14px] text-[16px] flex [&_>_span:last-child]:text-[#746788]
+          [&_>_span:last-child]:ml-auto [&_strong]:block [&_small]:text-[#746788] [&_small]:text-[12px]
           [&_small]:block public-portfolio`}
                     href={safeUrl(p.url)}
                     target="_blank"
@@ -362,15 +362,15 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
         )}
         {member.career?.length > 0 && (
           <section
-            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[12px] [&_>_p]:whitespace-pre-wrap
-          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[13px] [&_>_p]:leading-[1.9]
+            className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[16px] [&_>_p]:whitespace-pre-wrap
+          [&_>_p]:[overflow-wrap:anywhere] [&_>_p]:m-[0] [&_>_p]:text-[16px] [&_>_p]:leading-[1.9]
           public-section`}
           >
             <h3>공개 커리어</h3>
             {member.career.map((c, i) => (
               <div
                 className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] p-[10px_0]
-          text-[12px] [&_p]:text-[#746788] [&_p]:m-[4px_0] [&_p]:text-[11px] public-career`}
+          text-[16px] [&_p]:text-[#746788] [&_p]:m-[4px_0] [&_p]:text-[14px] public-career`}
                 key={i}
               >
                 <strong>{c.title}</strong>
@@ -381,7 +381,7 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
         )}
         <div
           className={`gap-2 mt-6.5 flex
-          max-[500px]:flex-wrap [&_button]:text-[12px]
+          max-[500px]:flex-wrap [&_button]:text-[16px]
           max-[500px]:[&_button]:min-w-[125px] public-profile-actions`}
         >
           <Action primary onClick={() => onChat(member.id)}>
@@ -397,7 +397,7 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
             </Action>
           )}
         </div>
-        <p className={'text-[#a49ab2] m-[14px_0_0] text-[9px] public-profile-note'}>
+        <p className={'text-[#a49ab2] m-[14px_0_0] text-[12px] public-profile-note'}>
           회원이 공개한 정보만 표시됩니다.
         </p>
       </section>

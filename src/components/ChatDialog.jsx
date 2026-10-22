@@ -80,7 +80,7 @@ export default function ChatDialog({ initialId, onClose }) {
           max-[760px]:overflow-x-auto chat-sidebar`}
         >
           <p
-            className={`text-[#746788] m-[0_8px_13px] text-[11px] font-[700] [&_>_span]:text-[#8b5ad1] [&_>_span]:ml-[5px]
+            className={`text-[#746788] m-[0_8px_13px] text-[14px] font-[700] [&_>_span]:text-[#8b5ad1] [&_>_span]:ml-[5px]
           max-[760px]:[.chat-sidebar_&]:hidden chat-section-label`}
           >
             대화 목록 <span>{peers.length}</span>
@@ -95,8 +95,8 @@ export default function ChatDialog({ initialId, onClose }) {
           max-[760px]:w-auto
           max-[760px]:min-w-35
           max-[760px]:m-[0]
-          max-[760px]:p-[7px] [&_strong]:text-[12px] [&_strong]:block [&_small]:text-[#746788]
-          [&_small]:mt-[3px] [&_small]:text-[10px] [&_small]:block
+          max-[760px]:p-[7px] [&_strong]:text-[16px] [&_strong]:block [&_small]:text-[#746788]
+          [&_small]:mt-[3px] [&_small]:text-[12px] [&_small]:block
           max-[760px]:[&_small]:hidden chat-contact ` +
                 (m.id === peer?.id
                   ? `[.project-choice&]:[background:#f6f6f7]
@@ -124,17 +124,17 @@ export default function ChatDialog({ initialId, onClose }) {
           ))}
           {!peers.length && (
             <p
-              className={`text-muted text-[12px]
+              className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
             >
               동료 찾기에서 대화를 시작해 보세요.
             </p>
           )}
           <p
-            className={`text-[#ada4bb] text-[13px] leading-[1.8] absolute bottom-4.5 left-5.5
+            className={`text-[#ada4bb] text-[16px] leading-[1.8] absolute bottom-4.5 left-5.5
           max-[760px]:hidden chat-sidebar-note`}
           >
             언어가 달라도,
@@ -152,9 +152,9 @@ export default function ChatDialog({ initialId, onClose }) {
               <div
                 className={`[border-bottom-width:1px] [border-bottom-style:solid] [border-bottom-color:var(--color-line)]
           justify-between items-center gap-[15px] p-[15px_20px] flex
-          max-[760px]:p-[10px_14px] [&_strong]:text-[13px] [&_small]:text-[#a49ab2] [&_small]:text-[10px]
-          [&_small]:block [&_label]:text-[#746788] [&_label]:m-[0] [&_label]:text-[10px] [&_select]:bg-white
-          [&_select]:w-[115px] [&_select]:mt-[3px] [&_select]:p-[5px] [&_select]:text-[11px] [&_select]:block
+          max-[760px]:p-[10px_14px] [&_strong]:text-[16px] [&_small]:text-[#a49ab2] [&_small]:text-[12px]
+          [&_small]:block [&_label]:text-[#746788] [&_label]:m-[0] [&_label]:text-[12px] [&_select]:bg-white
+          [&_select]:w-[115px] [&_select]:mt-[3px] [&_select]:p-[5px] [&_select]:text-[14px] [&_select]:block
           chat-peer-header`}
               >
                 <div className={'items-center gap-[11px] flex row'}>
@@ -164,13 +164,13 @@ export default function ChatDialog({ initialId, onClose }) {
                     <small>1:1 대화</small>
                   </div>
                 </div>
-                <span className="rounded-full bg-brand/10 px-3 py-1.5 text-[10px] font-semibold text-brand">
+                <span className="rounded-full bg-brand/10 px-3 py-1.5 text-[12px] font-semibold text-brand">
                   {languages[language]} 자동 번역
                 </span>
               </div>
               <div
                 className={`text-[#746788] [background:#fafafa] [border-bottom-width:1px] [border-bottom-style:solid]
-          [border-bottom-color:#f5f4f6] p-[9px_18px] text-[10px] leading-[1.7] [&_span]:text-[#a17ada]
+          [border-bottom-color:#f5f4f6] p-[9px_18px] text-[12px] leading-[1.7] [&_span]:text-[#a17ada]
           [&_span]:mr-[7px] [&_span]:font-[750] chat-offline`}
               >
                 받은 메시지를 {languages[language]}로 자동 번역합니다. 언어는 프로필에서 변경할 수
@@ -202,10 +202,10 @@ export default function ChatDialog({ initialId, onClose }) {
                   <div
                     className={
                       `[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[13px]
-          m-[0_25px_14px_0] p-[13px] text-[12px] [&_p]:whitespace-pre-wrap [&_p]:[overflow-wrap:anywhere]
-          [&_p]:m-[8px_0] [&_p]:text-[13px] [&_p]:leading-[1.7] [&_small]:text-muted
+          m-[0_25px_14px_0] p-[13px] text-[16px] [&_p]:whitespace-pre-wrap [&_p]:[overflow-wrap:anywhere]
+          [&_p]:m-[8px_0] [&_p]:text-[16px] [&_p]:leading-[1.7] [&_small]:text-muted
           [&_small]:[border-top-width:1px] [&_small]:[border-top-style:solid]
-          [&_small]:[border-top-color:#e9e7eb] [&_small]:pt-2 [&_small]:text-[11px] [&_small]:leading-[1.7]
+          [&_small]:[border-top-color:#e9e7eb] [&_small]:pt-2 [&_small]:text-[14px] [&_small]:leading-[1.7]
           [&_small]:block
           [.chat-dialog_&]:bg-white
           [.chat-dialog_&]:[border-width:1px]
@@ -256,7 +256,7 @@ export default function ChatDialog({ initialId, onClose }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] empty`}
                   >
                     첫 메시지를 남겨 보세요.
@@ -271,19 +271,19 @@ export default function ChatDialog({ initialId, onClose }) {
           [.chat-dialog_&]:p-[16px_20px_10px]
           max-[760px]:[.chat-dialog_&]:p-3
           [.chat-dialog_&_label]:m-[0]
-          [.chat-dialog_&_label]:text-[10px]`}
+          [.chat-dialog_&_label]:text-[12px]`}
                 onSubmit={submit}
               >
                 <label
                   htmlFor="chat-text"
-                  className={`text-[#746788] m-[0_8px_13px] text-[11px] font-[700] [&_>_span]:text-[#8b5ad1] [&_>_span]:ml-[5px]
+                  className={`text-[#746788] m-[0_8px_13px] text-[14px] font-[700] [&_>_span]:text-[#8b5ad1] [&_>_span]:ml-[5px]
           max-[760px]:[.chat-sidebar_&]:hidden chat-section-label`}
                 >
                   메시지 작성
                 </label>
                 <div
-                  className={`gap-2 mt-1.5 flex [&_input]:rounded-[12px] [&_input]:min-w-0 [&_input]:text-[12px]
-          [&_button]:rounded-[12px] [&_button]:shrink-0 [&_button]:text-[12px]
+                  className={`gap-2 mt-1.5 flex [&_input]:rounded-[12px] [&_input]:min-w-0 [&_input]:text-[16px]
+          [&_button]:rounded-[12px] [&_button]:shrink-0 [&_button]:text-[16px]
           [.chat-dialog_&]:mt-2 chat-compose`}
                 >
                   <input
@@ -302,12 +302,12 @@ export default function ChatDialog({ initialId, onClose }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[14px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand
@@ -342,7 +342,7 @@ export default function ChatDialog({ initialId, onClose }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] empty`}
             >
               아직 대화 상대가 없습니다.

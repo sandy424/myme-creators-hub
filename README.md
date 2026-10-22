@@ -23,22 +23,22 @@ npm test          # 로컬 UI 테스트 API 기능 검사
 
 ## 2. 어디를 수정하나요?
 
-| 수정할 화면                               | 파일                                |
-| ----------------------------------------- | ----------------------------------- |
-| 화면 연결·상단 메뉴·로그인 상태·팝업 연결 | `src/App.jsx`                       |
-| Tailwind 테마 색상·공통 요소 기본 스타일  | `src/index.css`                     |
-| 메인 화면·최근 글·카테고리 배지           | `src/pages/Home.jsx`                |
-| 게시판·글 작성·상세·댓글·대댓글           | `src/pages/Community.jsx`           |
-| 동료 찾기                                 | `src/pages/Members.jsx`             |
-| 팀협업·프로젝트·작업 공간 링크            | `src/pages/Projects.jsx`            |
-| 로그인·회원가입                           | `src/components/AuthDialog.jsx`     |
-| 검색형 활동 국가 선택                     | `src/components/CountrySelect.jsx`  |
-| 프로필 편집·공개 프로필                   | `src/components/Profile.jsx`        |
-| 채팅                                      | `src/components/ChatDialog.jsx`     |
-| 커리어·지갑·공식 기회 팝업                | `src/components/ActivityDialog.jsx` |
-| 재사용 버튼·아바타·팝업                   | `src/components/UI.jsx`             |
-| API 통신과 카테고리·언어 목록             | `src/api.js`                        |
-| 백엔드 없이 화면을 테스트하는 로컬 어댑터 | `src/mock/api.js`                   |
+| 수정할 화면                               | 파일                               |
+| ----------------------------------------- | ---------------------------------- |
+| 화면 연결·상단 메뉴·로그인 상태·팝업 연결 | `src/App.jsx`                      |
+| Tailwind 테마 색상·공통 요소 기본 스타일  | `src/index.css`                    |
+| 메인 화면·최근 글·카테고리 배지           | `src/pages/Home.jsx`               |
+| 게시판·글 작성·상세·댓글·대댓글           | `src/pages/Community.jsx`          |
+| 동료 찾기                                 | `src/pages/Members.jsx`            |
+| 팀협업·프로젝트·작업 공간 링크            | `src/pages/Projects.jsx`           |
+| 로그인·회원가입                           | `src/components/AuthDialog.jsx`    |
+| 검색형 활동 국가 선택                     | `src/components/CountrySelect.jsx` |
+| 프로필 편집·공개 프로필                   | `src/components/Profile.jsx`       |
+| 채팅                                      | `src/components/ChatDialog.jsx`    |
+| 커리어·지갑·공식 기회 팝업                | `src/components/PointWallet.jsx`   |
+| 재사용 버튼·아바타·팝업                   | `src/components/UI.jsx`            |
+| API 통신과 카테고리·언어 목록             | `src/api.js`                       |
+| 백엔드 없이 화면을 테스트하는 로컬 어댑터 | `src/mock/api.js`                  |
 
 화면을 문자열로 생성하는 기존 `app.js`를 끼워 넣은 방식이 아닙니다. JSX 컴포넌트와 React state/이벤트로 구성했습니다.
 

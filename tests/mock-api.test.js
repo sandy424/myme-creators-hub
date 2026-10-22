@@ -29,6 +29,41 @@ const signup = (name, email, extra = {}) =>
     role: '개발',
     ...extra,
   });
+test('project teams accept colleagues, retain selections and legacy text, and allow removal', async () => {
+  resetMockData();
+  await signup('Owner', 'owner@example.test');
+  const ownerId = (await mockApi('community')).selfId;
+  await signup('Peer', 'peer@example.test');
+  const peerId = (await mockApi('community')).selfId;
+  await mockApi('connection', { peerId: ownerId, operation: 'request' });
+  await mockApi('login', { email: 'owner@example.test', password: 'test-password' });
+  const base = { title: 'Team project', summary: 'Summary', state: '개발 중', links: [] };
+  await assert.rejects(
+    () => mockApi('save-project', { ...base, teamMembers: [{ id: peerId, name: 'Fake' }] }),
+    /동료/,
+  );
+  await mockApi('connection', { peerId, operation: 'accept' });
+  const saved = await mockApi('save-project', {
+    ...base,
+    teamMembers: [{ id: peerId, name: 'Fake' }, { id: peerId }],
+    legacyMembers: '기존 구성',
+  });
+  let project = (await mockApi('community')).projects[0];
+  assert.deepEqual(project.teamMembers, [{ id: peerId, name: 'Peer' }]);
+  assert.equal(project.members, '기존 구성, Peer');
+  await mockApi('save-project', {
+    ...base,
+    id: saved.id,
+    links: [{ name: 'Workspace', url: 'https://example.com' }],
+  });
+  project = (await mockApi('community')).projects[0];
+  assert.deepEqual(project.teamMembers, [{ id: peerId, name: 'Peer' }]);
+  await mockApi('save-project', { ...project, teamMembers: [], legacyMembers: '' });
+  project = (await mockApi('community')).projects[0];
+  assert.equal(project.members, '');
+  assert.deepEqual(project.teamMembers, []);
+  resetMockData();
+});
 test('empty initial data, signup and login, shared UI fixtures, nested replies, privacy and reset', async () => {
   resetMockData();
   assert.deepEqual(await mockApi('me'), { id: null });

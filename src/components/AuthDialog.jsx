@@ -66,7 +66,7 @@ export default function AuthDialog({ initialMode = 'login', onClose, onSuccess }
           [dialog&]:max-w-112 [dialog&]:max-h-[92dvh] [dialog&]:p-[0] [dialog&]:overflow-hidden
           [dialog&]:shadow-[0_25px_60px_#0004] [&::backdrop]:[backdrop-filter:blur(3px)]
           [&::backdrop]:[background:#000b] [&_label]:text-[#423a4e] [&_label]:m-[12px_0_0]
-          [&_label]:text-[12px] [&_label]:font-[800] [&_label]:leading-[1.4] [&_label]:block
+          [&_label]:text-[12px] [&_label]:font-[600] [&_label]:leading-[1.4] [&_label]:block
           [&_input]:text-[#1a0f2a] [&_input]:[background:#fafafa] [&_input]:[border-width:1px]
           [&_input]:[border-style:solid] [&_input]:[border-color:#d5d0dc] [&_input]:rounded-[12px]
           [&_input]:w-full [&_input]:min-h-9.5 [&_input]:mt-1 [&_input]:p-[10px_14px] [&_input]:text-[12px]
@@ -77,6 +77,7 @@ export default function AuthDialog({ initialMode = 'login', onClose, onSuccess }
           [&_select]:leading-[16px] [&_select]:block [&_input:focus]:outline-offset-[0]
           [&_input:focus]:[outline:2px_solid_#a17ada] [&_select:focus]:outline-offset-[0]
           [&_select:focus]:[outline:2px_solid_#a17ada]
+          [&_.signup-country_>_small]:text-[10px] [&_.signup-country-list_button]:text-[12px] [&_.signup-country-list_p]:text-[11px] [&_.form-error]:text-[12px]
           [&_input:-webkit-autofill]:[-webkit-box-shadow:inset_0_0_0_50px_#f3f2f4] auth-dialog ` +
         (signup
           ? `[dialog&]:max-w-112 [dialog&]:max-h-[92dvh] [dialog&]:p-6 [dialog&]:overflow-y-auto
@@ -97,7 +98,7 @@ export default function AuthDialog({ initialMode = 'login', onClose, onSuccess }
           [&_button]:[border-bottom-width:2px] [&_button]:[border-bottom-style:solid]
           [&_button]:[border-bottom-color:#0000] [&_button]:rounded-[0] [&_button]:justify-center
           [&_button]:items-center [&_button]:gap-1.5 [&_button]:w-[50%] [&_button]:p-3 [&_button]:text-[12px]
-          [&_button]:font-[800] [&_button]:flex [&_svg]:w-[13px] [&_svg]:h-[13px] auth-tabs`}
+          [&_button]:font-[600] [&_button]:flex [&_svg]:w-[13px] [&_svg]:h-[13px] auth-tabs`}
         role="tablist"
         aria-label="로그인 및 가입"
       >
@@ -322,7 +323,7 @@ export default function AuthDialog({ initialMode = 'login', onClose, onSuccess }
           [.auth-dialog_&]:mt-3.5
           [.auth-dialog_&]:p-3
           [.auth-dialog_&]:text-[12px]
-          [.auth-dialog_&]:font-[900]
+          [.auth-dialog_&]:font-[700]
           [.auth-dialog_&]:leading-[16px]
           [.auth-dialog_&]:flex
           [.auth-dialog_&]:shadow-[0_3px_5px_#8b5ad133] [&_svg]:w-[15px] [&_svg]:h-[15px]

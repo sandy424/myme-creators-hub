@@ -12,6 +12,8 @@ test('React pages and dialogs render independently with empty data and with cate
       { default: Auth } = await vite.ssrLoadModule('/src/components/AuthDialog.jsx'),
       { default: Profile } = await vite.ssrLoadModule('/src/components/Profile.jsx'),
       { default: Chat } = await vite.ssrLoadModule('/src/components/ChatDialog.jsx'),
+      { default: Activity } = await vite.ssrLoadModule('/src/components/PointWallet.jsx'),
+      { default: HeaderActions } = await vite.ssrLoadModule('/src/components/HeaderActions.jsx'),
       { Projects, Team } = await vite.ssrLoadModule('/src/pages/Projects.jsx');
     const user = {
         id: 'test',
@@ -43,6 +45,15 @@ test('React pages and dialogs render independently with empty data and with cate
     };
     const render = (component) =>
       renderToStaticMarkup(React.createElement(HubContext.Provider, { value: ctx }, component));
+    const guestHeader = render(React.createElement(HeaderActions, { user: null, unreadCount: 0 }));
+    assert(guestHeader.includes('id="header-notice-count"'));
+    assert.match(guestHeader, />0<\/span>/);
+    assert.match(guestHeader, /aria-label="로그인 \/ 회원가입"/);
+    const accountHeader = render(React.createElement(HeaderActions, { user, unreadCount: 103 }));
+    assert.match(accountHeader, /aria-label="읽지 않은 알림 103개"/);
+    assert.match(accountHeader, />99\+<\/span>/);
+    assert.match(accountHeader, /aria-label="내 계정"/);
+    assert.match(accountHeader, /aria-label="로그아웃"/);
     assert.match(render(React.createElement(Home)), /아직 등록된 글이 없습니다/);
     const writePost = render(React.createElement(WritePost));
     assert.match(writePost, /관련 HTTPS 링크 \(선택\)/);
@@ -69,6 +80,14 @@ test('React pages and dialogs render independently with empty data and with cate
     }
     assert.match(render(React.createElement(Projects)), /등록된 프로젝트가 없습니다/);
     assert.match(render(React.createElement(Team)), /테스트님의 협력/);
+    state.career = [{ id: 1, title: '첫 프로젝트', role: '개발', contribution: '기여 내용' }];
+    const career = render(React.createElement(Activity, { kind: 'career', onClose() {} }));
+    assert.match(career, /aria-label="첫 프로젝트 수정"/);
+    assert.match(career, /등록한 경력/);
+    state.career = [];
+    const wallet = render(React.createElement(Activity, { kind: 'wallet', onClose() {} }));
+    assert.match(wallet, /회사 기회 확인/);
+    assert.match(wallet, /aria-label="포인트 내역 필터"/);
     assert.match(render(React.createElement(Chat, { onClose() {} })), /아직 대화 상대가 없습니다/);
     const auth = render(
       React.createElement(Auth, { initialMode: 'signup', onClose() {}, onSuccess() {} }),

@@ -42,22 +42,22 @@ export default function TranslatedMessage({ text, language, accountId }) {
     <div ref={ref}>
       <p>{current?.status === 'done' ? current.text : text}</p>
       {(!current || current.status === 'loading') && (
-        <span className="text-[10px] text-muted" role="status">
+        <span className="text-[12px] text-muted" role="status">
           자동 번역 중…
         </span>
       )}
       {current?.status === 'done' && current.text !== text && (
         <details className="mt-2 pt-2">
-          <summary className="cursor-pointer text-[10px] text-brand">원문 보기</summary>
+          <summary className="cursor-pointer text-[12px] text-brand">원문 보기</summary>
           <p className="text-muted">{text}</p>
         </details>
       )}
       {current?.status === 'error' && (
-        <div className="mt-2 text-[10px] leading-relaxed text-muted" role="status">
+        <div className="mt-2 text-[12px] leading-relaxed text-muted" role="status">
           <span>{current.error} 현재 원문을 표시하고 있어요.</span>
           <button
             type="button"
-            className="ml-2 rounded border-0 bg-transparent p-0 text-[10px] text-brand underline"
+            className="ml-2 rounded border-0 bg-transparent p-0 text-[12px] text-brand underline"
             onClick={() => setAttempt((value) => value + 1)}
           >
             다시 번역

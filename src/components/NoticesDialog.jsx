@@ -25,14 +25,14 @@ export default function NoticesDialog({ onClose, onOpen }) {
   return (
     <Modal title="알림" onClose={onClose}>
       <div className="my-4 flex items-center justify-between gap-3">
-        <p className="m-0 text-xs text-muted" role="status">
+        <p className="m-0 text-sm text-muted" role="status">
           읽지 않은 알림 <strong className="text-brand">{unread.length}</strong>개
         </p>
         <button
           type="button"
           disabled={busy || !unread.length}
           onClick={() => read(unread.map((notice) => notice.id))}
-          className="rounded-lg border border-solid border-line bg-canvas px-3 py-2 text-xs text-ink hover:bg-brand/10 hover:text-brand"
+          className="rounded-lg border border-solid border-line bg-canvas px-3 py-2 text-sm text-ink hover:bg-brand/10 hover:text-brand"
         >
           모두 읽음
         </button>
@@ -53,11 +53,11 @@ export default function NoticesDialog({ onClose, onOpen }) {
             />
             <span className="min-w-0 flex-1">
               <span
-                className={`block text-xs leading-relaxed text-ink ${notice.read ? 'font-normal' : 'font-semibold'}`}
+                className={`block text-sm leading-relaxed text-ink ${notice.read ? 'font-normal' : 'font-semibold'}`}
               >
                 {notice.text}
               </span>
-              <span className="mt-1 block break-words text-[11px] leading-relaxed text-muted">
+              <span className="mt-1 block break-words text-[14px] leading-relaxed text-muted">
                 {notice.sub}
               </span>
               <span className="sr-only">{notice.read ? '읽음' : '읽지 않음'}</span>
@@ -65,7 +65,7 @@ export default function NoticesDialog({ onClose, onOpen }) {
           </button>
         ))}
         {!state.notices.length && (
-          <p className="py-10 text-center text-sm text-muted">새 알림이 없습니다.</p>
+          <p className="py-10 text-center text-base text-muted">새 알림이 없습니다.</p>
         )}
       </div>
     </Modal>

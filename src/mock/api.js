@@ -294,11 +294,37 @@ async function runMockApi(action, body) {
       if (url.protocol !== 'https:') fail('HTTPS 주소를 입력해 주세요.');
       return { name: l.name, url: url.href };
     });
+    const previousTeam = e?.payload.teamMembers || [];
+    const teamMembers =
+      body.teamMembers === undefined
+        ? previousTeam
+        : Array.from(new Set(body.teamMembers.map((member) => Number(member.id)))).map((id) => {
+            const account = db.accounts.find((account) => account.memberId === id);
+            const existing = previousTeam.find((member) => member.id === id);
+            const colleague =
+              account &&
+              db.connections.some(
+                (connection) =>
+                  connection.status === 'accepted' &&
+                  mine(connection) &&
+                  (connection.sender === account.id || connection.receiver === account.id),
+              );
+            if (!colleague && !existing) fail('동료인 회원만 팀 구성에 추가할 수 있습니다.');
+            return { id, name: account?.profile.name || existing.name };
+          });
+    const legacyMembers =
+      body.legacyMembers ??
+      e?.payload.legacyMembers ??
+      (e?.payload.teamMembers ? '' : body.members || e?.payload.members || '');
     const payload = {
       title: body.title,
       summary: body.summary,
       state: body.state,
-      members: body.members || '',
+      members: [legacyMembers, ...teamMembers.map((member) => member.name)]
+        .filter(Boolean)
+        .join(', '),
+      teamMembers,
+      legacyMembers,
       links,
     };
     if (e) e.payload = payload;

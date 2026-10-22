@@ -65,7 +65,7 @@ export function AttachmentPicker({ files, onChange, disabled, onReadingChange })
 
   return (
     <section className="mt-5" aria-labelledby="attachment-heading">
-      <h2 id="attachment-heading" className="m-0 text-xs font-semibold text-ink">
+      <h2 id="attachment-heading" className="m-0 text-sm font-semibold text-ink">
         첨부자료 (선택)
       </h2>
       <div
@@ -103,18 +103,18 @@ export function AttachmentPicker({ files, onChange, disabled, onReadingChange })
           <span className="mb-1 grid h-11 w-11 place-items-center rounded-xl bg-brand/10 text-brand">
             <AttachmentIcon />
           </span>
-          <span className="text-sm font-semibold text-ink">
+          <span className="text-base font-semibold text-ink">
             {reading ? '파일을 준비하고 있어요…' : '파일을 끌어다 놓거나 선택해 주세요'}
           </span>
-          <span className="text-xs font-normal text-muted">
+          <span className="text-sm font-normal text-muted">
             이미지, 문서, 압축파일 등 함께 나눌 자료
           </span>
-          <span className="mt-2 rounded-lg border border-solid border-brand/20 bg-white px-4 py-2 text-xs font-semibold text-brand">
+          <span className="mt-2 rounded-lg border border-solid border-brand/20 bg-white px-4 py-2 text-sm font-semibold text-brand">
             파일 선택
           </span>
         </label>
       </div>
-      <p id="attachment-help" className="mt-2 text-xs leading-relaxed text-muted">
+      <p id="attachment-help" className="mt-2 text-sm leading-relaxed text-muted">
         최대 5개 · 전체 2MB까지 첨부할 수 있어요. 큰 파일은 위의 HTTPS 링크로 공유해 주세요.
       </p>
       {files.length > 0 && (
@@ -129,10 +129,10 @@ export function AttachmentPicker({ files, onChange, disabled, onReadingChange })
                   <AttachmentIcon />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-medium text-ink" title={file.name}>
+                  <span className="block truncate text-sm font-medium text-ink" title={file.name}>
                     {file.name}
                   </span>
-                  <span className="text-[11px] text-muted">{formatFileSize(file.size)}</span>
+                  <span className="text-[14px] text-muted">{formatFileSize(file.size)}</span>
                 </span>
                 <button
                   type="button"
@@ -149,7 +149,7 @@ export function AttachmentPicker({ files, onChange, disabled, onReadingChange })
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-right text-[11px] text-muted" role="status">
+          <p className="mt-2 text-right text-[14px] text-muted" role="status">
             {files.length}개 · {formatFileSize(totalBytes)}
           </p>
         </>
@@ -169,7 +169,7 @@ export function AttachmentDownloads({ files }) {
   if (!attachments.length) return null;
   return (
     <section className="mb-6" aria-label="첨부자료 다운로드">
-      <h2 className="mb-3 text-sm font-semibold text-ink">
+      <h2 className="mb-3 text-base font-semibold text-ink">
         첨부자료 <span className="text-brand">{attachments.length}</span>
       </h2>
       <ul className="m-0 list-none space-y-2 p-0">
@@ -184,10 +184,10 @@ export function AttachmentDownloads({ files }) {
                 <AttachmentIcon />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block break-all text-sm font-medium">{file.name}</span>
-                <span className="text-xs text-muted">{formatFileSize(file.size)}</span>
+                <span className="block break-all text-base font-medium">{file.name}</span>
+                <span className="text-sm text-muted">{formatFileSize(file.size)}</span>
               </span>
-              <span className="shrink-0 text-xs font-semibold text-brand">다운로드 ↓</span>
+              <span className="shrink-0 text-sm font-semibold text-brand">다운로드 ↓</span>
             </a>
           </li>
         ))}

@@ -2,11 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, emptyState, isMock } from './api';
 import { resetMockData, STORAGE_KEY } from './mock/api';
 import { HubContext } from './HubContext';
-import { Avatar, Icon, Modal, Action } from './components/UI';
+import { Modal, Action } from './components/UI';
+import HeaderActions from './components/HeaderActions';
 import AuthDialog from './components/AuthDialog';
 import ProfileDialog, { PublicProfile } from './components/Profile';
 import ChatDialog from './components/ChatDialog';
-import ActivityDialog from './components/ActivityDialog';
+import ActivityDialog from './components/PointWallet';
 import NoticesDialog from './components/NoticesDialog';
 import Home from './pages/Home';
 import { Board, WritePost, PostDetail } from './pages/Community';
@@ -164,7 +165,7 @@ export default function App() {
       <div
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -176,7 +177,7 @@ export default function App() {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
       >
         화면을 불러오는 중…
@@ -188,7 +189,7 @@ export default function App() {
       <div
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -200,7 +201,7 @@ export default function App() {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
       >
         <h2>로그인 후 이용할 수 있어요.</h2>
@@ -239,28 +240,34 @@ export default function App() {
           max-[650px]:[&_nav]:[width:100%]
           max-[650px]:[&_nav]:[padding-top:12px]`}
       >
-        <div className="mx-auto flex h-[98px] w-full max-w-[1260px] items-center justify-between gap-[25px] px-10 max-[900px]:gap-[15px] max-[900px]:px-[25px] max-[760px]:min-h-[74px] max-[760px]:flex-wrap max-[650px]:h-auto max-[650px]:min-h-[90px] max-[650px]:gap-3.5 max-[650px]:px-5 max-[650px]:py-[18px]">
+        <div className="mx-auto flex h-[98px] w-full max-w-[1260px] items-center justify-between gap-[25px] px-10 max-[900px]:gap-[15px] max-[900px]:px-[25px] max-[760px]:min-h-[74px] max-[760px]:flex-wrap max-[650px]:h-auto max-[650px]:min-h-[90px] max-[650px]:gap-3.5 max-[650px]:px-5 max-[650px]:py-[18px] max-[360px]:gap-2">
           <a
-            className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[850] leading-[1.3] flex
-          max-[900px]:text-[15px]
-          max-[650px]:text-[14px] [&_em]:text-brand [&_em]:not-italic [&_small]:tracking-[2px]
-          [&_small]:text-muted [&_small]:mt-[5px] [&_small]:text-[8px] [&_small]:block
-          max-[650px]:[&_small]:text-[7px] [footer_&]:text-[#8d819e] [footer_&]:text-[14px] brand`}
+            className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[700] leading-[1.3] flex
+          max-[900px]:text-[16px]
+          max-[650px]:text-[16px] max-[360px]:gap-2 [&_em]:text-brand [&_em]:not-italic [&_small]:tracking-[2px]
+          [&_small]:text-muted [&_small]:mt-[5px] [&_small]:text-[12px] [&_small]:block
+          max-[650px]:[&_small]:text-[7px] [footer_&]:text-[#8d819e] [footer_&]:text-[16px] brand`}
             href="#home"
           >
             <b aria-hidden="true">
-              <img src="/assets/logo.png" alt="MYME Creators Hub" width="50" height="50" />
+              <img
+                className="max-[360px]:h-10 max-[360px]:w-10"
+                src="/assets/logo.png"
+                alt="MYME Creators Hub"
+                width="50"
+                height="50"
+              />
             </b>
             <span className="flex flex-col items-center gap-1 text-center">
-              <span className="block text-[24px]">MYME</span>
-              <em className="block text-[14px] max-[900px]:text-[12px] max-[650px]:text-[11px]">
+              <span className="block text-[24px] max-[360px]:text-xl">MYME</span>
+              <em className="block text-[16px] max-[900px]:text-[16px] max-[650px]:text-[14px] max-[360px]:text-xs">
                 CREATORS HUB
               </em>
             </span>
           </a>
           <nav
             className={`[background:#f5f4f6] [border-width:1px] [border-style:solid] [border-color:#e9e7eb]
-          [border-radius:16px] [gap:5px] [padding:5px] [font-size:13px] [font-weight:700] [display:flex]
+          [border-radius:16px] [gap:5px] [padding:5px] [font-size:16px] [font-weight:700] [display:flex]
           [box-shadow:inset_0_2px_4px_#1a0f2a04]
           max-[900px]:[gap:18px]
           max-[760px]:[order:3]
@@ -268,12 +275,12 @@ export default function App() {
           max-[760px]:[width:100%]
           max-[760px]:[padding:4px]
           max-[760px]:[overflow:auto] [&_a]:[color:#746788] [&_a]:[border-radius:12px]
-          [&_a]:[padding:10px_24px] [&_a]:[font-size:13px] [&_a]:[transition:background_.15s,color_.15s]
+          [&_a]:[padding:10px_24px] [&_a]:[font-size:16px] [&_a]:[transition:background_.15s,color_.15s]
           max-[760px]:[&_a]:[white-space:nowrap]
           max-[760px]:[&_a]:[text-align:center]
           max-[760px]:[&_a]:[flex:1]
           max-[760px]:[&_a]:[padding:9px_15px]
-          max-[760px]:[&_a]:[font-size:12px] [&_a_span]:[margin-right:7px]`}
+          max-[760px]:[&_a]:[font-size:16px] [&_a_span]:[margin-right:7px]`}
             aria-label="주 메뉴"
           >
             <a
@@ -309,108 +316,14 @@ export default function App() {
               팀협업
             </a>
           </nav>
-          <div
-            className={`items-center gap-5 flex
-          max-[760px]:ml-auto [&_button]:[background:0_0] [&_button]:[border-width:0]
-          [&_button]:[border-style:none] [&_button]:[border-color:currentColor] [&_button]:p-[5px]
-          [&_button]:text-[24px] [&_button]:relative [&_i]:text-white [&_i]:[background:#ac8ade]
-          [&_i]:rounded-full [&_i]:min-w-[15px] [&_i]:text-[9px] [&_i]:not-italic [&_i]:absolute [&_i]:top-[0]
-          [&_i]:right-[-3px] utilities`}
-          >
-            <button
-              id="bell"
-              aria-label="알림 열기"
-              onClick={() => requireUser(() => open('notices'))}
-            >
-              <svg
-                width="23"
-                height="23"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                aria-hidden="true"
-              >
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
-              </svg>
-              <i>{state.notices.filter((n) => !n.read).length}</i>
-            </button>
-            <div
-              id="account"
-              className={`flex-wrap
-          [.original-boards_&]:grid-cols-[repeat(auto-fit,minmax(125px,1fr))]
-          [.original-boards_&]:gap-2.5
-          [.original-boards_&]:mt-4.5
-          [.original-boards_&]:grid
-          max-[650px]:[.original-boards_&]:grid-cols-[repeat(2,minmax(0,1fr))]
-          [.original-welcome_&]:gap-2 actions items-center gap-2 flex
-          max-[600px]:[&_button]:p-2
-          max-[600px]:[&_button]:text-[12px]`}
-              aria-label="내 계정"
-            >
-              {user ? (
-                <>
-                  <button
-                    className={`text-[#8b5ad1] rounded-full [place-items:center] w-[37px] h-[37px] grid [background:#efeef1]!
-          text-[14px]!
-          [.membercard_&]:w-[65px]
-          [.membercard_&]:h-[65px]
-          [.membercard_&]:m-[0_auto_15px]
-          [.membercard_&]:text-[21px]!
-          [.chat-contact_&]:shrink-0
-          max-[760px]:[.chat-contact_&]:w-[29px]
-          max-[760px]:[.chat-contact_&]:h-[29px]
-          [.member-summary_&]:shrink-0
-          [.public-profile-avatar_&]:text-[#8b5ad1]
-          [.public-profile-avatar_&]:[border-width:4px]
-          [.public-profile-avatar_&]:[border-style:solid]
-          [.public-profile-avatar_&]:[border-color:#fff]
-          [.public-profile-avatar_&]:rounded-full
-          [.public-profile-avatar_&]:w-21.5
-          [.public-profile-avatar_&]:h-21.5
-          [.public-profile-avatar_&]:[background:#996ed6]!
-          [.public-profile-avatar_&]:text-[28px]! [#account_&]:p-[0] [#account_&]:overflow-hidden
-          [.profile-photo-preview_&]:rounded-[16px]
-          [.profile-photo-preview_&]:w-full
-          [.profile-photo-preview_&]:h-full
-          [.profile-photo-preview_&_img]:object-cover
-          [.profile-photo-preview_&_img]:w-full
-          [.profile-photo-preview_&_img]:h-full [#account_>_.avatar_>_&]:rounded-[inherit]
-          [#account_>_.avatar_>_&]:w-full [#account_>_.avatar_>_&]:h-full avatar`}
-                    aria-label="내 계정"
-                    onClick={() => open('account')}
-                  >
-                    <Avatar user={user} />
-                  </button>
-                  <button
-                    className={`[#account_&]:text-white [#account_&]:whitespace-nowrap [#account_&]:bg-brand
-          [#account_&]:[border:0_#0000] [#account_&]:rounded-[12px] [#account_&]:items-center
-          [#account_&]:gap-[5px] [#account_&]:p-[7px_13px] [#account_&]:text-[12px] [#account_&]:font-[800]
-          [#account_&]:leading-[1.2] [#account_&]:inline-flex [#account_&:hover]:text-white
-          [#account_&:hover]:[background:#6e43c5] [#account_&_svg]:w-[13px] [#account_&_svg]:h-[13px]
-          focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_#b697e2] auth-entry`}
-                    onClick={logout}
-                  >
-                    <Icon name="enter" />
-                    로그아웃
-                  </button>
-                </>
-              ) : (
-                <button
-                  className={`[#account_&]:text-white [#account_&]:whitespace-nowrap [#account_&]:bg-brand
-          [#account_&]:[border:0_#0000] [#account_&]:rounded-[12px] [#account_&]:items-center
-          [#account_&]:gap-[5px] [#account_&]:p-[7px_13px] [#account_&]:text-[12px] [#account_&]:font-[800]
-          [#account_&]:leading-[1.2] [#account_&]:inline-flex [#account_&:hover]:text-white
-          [#account_&:hover]:[background:#6e43c5] [#account_&_svg]:w-[13px] [#account_&_svg]:h-[13px]
-          focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_#b697e2] auth-entry`}
-                  onClick={() => open('auth')}
-                >
-                  <Icon name="enter" />
-                  로그인 / 가입
-                </button>
-              )}
-            </div>
-          </div>
+          <HeaderActions
+            user={user}
+            unreadCount={state.notices.filter((notice) => !notice.read).length}
+            onNotices={() => requireUser(() => open('notices'))}
+            onAccount={() => open('account')}
+            onLogout={logout}
+            onLogin={() => open('auth')}
+          />
         </div>
       </header>
       <main
@@ -423,11 +336,11 @@ export default function App() {
       </main>
       <button
         className={`z-[45] text-white bg-brand [border-width:3px] [border-style:solid] [border-color:#0000]
-          rounded-[18px] items-center gap-[9px] p-[13px_18px] text-[11px] font-[800] flex fixed bottom-5.5
+          rounded-[18px] items-center gap-[9px] p-[13px_18px] text-[14px] font-[600] flex fixed bottom-5.5
           right-[25px] shadow-[0_8px_24px_#7c54b52b]
           max-[760px]:bottom-4
           max-[760px]:right-4
-          max-[650px]:text-[10px]
+          max-[650px]:text-[12px]
           max-[650px]:bottom-3.5
           max-[650px]:right-3.5 hover:text-white hover:[background:#6e43c5] [&_>_span]:[background:#9b71d7]
           [&_>_span]:rounded-full [&_>_span]:w-2 [&_>_span]:h-2 chat-launcher`}
@@ -441,15 +354,15 @@ export default function App() {
       <footer
         className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] [color:#a49caf]
           [background:#eae8ed] [border-color:#dedbe2] w-full [padding:32px_6%]
-          max-[650px]:[padding:32px_6%_85px] [&_p]:[color:#a39bae] [&_p]:[font-size:11px]
-          [&_small]:[color:#a39bae] [&_small]:[font-size:11px]`}
+          max-[650px]:[padding:32px_6%_85px] [&_p]:[color:#a39bae] [&_p]:[font-size:14px]
+          [&_small]:[color:#a39bae] [&_small]:[font-size:14px]`}
       >
         <a
-          className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[850] leading-[1.3] flex
-          max-[900px]:text-[15px]
-          max-[650px]:text-[14px] [&_em]:text-brand [&_em]:not-italic [&_small]:tracking-[2px]
-          [&_small]:text-muted [&_small]:mt-[5px] [&_small]:text-[8px] [&_small]:block
-          max-[650px]:[&_small]:text-[7px] [footer_&]:text-[#8d819e] [footer_&]:text-[14px] brand`}
+          className={`whitespace-nowrap tracking-[-.6px] items-center gap-[11px] text-[18px] font-[700] leading-[1.3] flex
+          max-[900px]:text-[16px]
+          max-[650px]:text-[16px] [&_em]:text-brand [&_em]:not-italic [&_small]:tracking-[2px]
+          [&_small]:text-muted [&_small]:mt-[5px] [&_small]:text-[12px] [&_small]:block
+          max-[650px]:[&_small]:text-[7px] [footer_&]:text-[#8d819e] [footer_&]:text-[16px] brand`}
           href="#home"
         >
           MYME Creators Hub
@@ -460,7 +373,7 @@ export default function App() {
       {toast && (
         <div
           id="toast"
-          className={`block text-white z-[99] [background:#2f2a37] rounded-[12px] p-[12px_25px] text-[13px]  fixed
+          className={`block text-white z-[99] [background:#2f2a37] rounded-[12px] p-[12px_25px] text-[16px]  fixed
           bottom-7.5 left-[50%] [transform:translate(-50%)]`}
           role="status"
         >
@@ -506,11 +419,11 @@ export default function App() {
         <Modal title="내 계정" onClose={close}>
           <p>{user.name}님</p>
           <p
-            className={`text-muted text-[12px]
+            className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
           >
             {user.email}
           </p>

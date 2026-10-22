@@ -43,7 +43,7 @@ export function Avatar({ user = {} }) {
     <span
       className={
         `text-[#8b5ad1] rounded-full [place-items:center] w-[37px] h-[37px] grid [background:#efeef1]!
-          text-[14px]!
+          text-[16px]!
           [.membercard_&]:w-[65px]
           [.membercard_&]:h-[65px]
           [.membercard_&]:m-[0_auto_15px]
@@ -89,7 +89,7 @@ export function Tag({ category }) {
     <span
       className={
         `text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag ` +
@@ -156,7 +156,7 @@ export function Modal({ title, kind = '', onClose, children }) {
           [.public-profile-dialog_&_h2]:text-[#d5d0dc]
           [.public-profile-dialog_&_h2]:max-w-[calc(100%_-_100px)]
           [.public-profile-dialog_&_h2]:m-[0]
-          [.public-profile-dialog_&_h2]:text-[11px]
+          [.public-profile-dialog_&_h2]:text-[14px]
           [.public-profile-dialog_&_h2]:font-[500]
           [.public-profile-dialog_&_h2]:leading-[20px]
           [.public-profile-dialog_&_h2]:absolute
@@ -178,9 +178,9 @@ export function Modal({ title, kind = '', onClose, children }) {
           [.auth-dialog_&_h2]:text-white
           [.auth-dialog_&_h2]:m-[0]
           [.auth-dialog_&_h2]:text-[14px]
-          [.auth-dialog_&_h2]:font-[900]
+          [.auth-dialog_&_h2]:font-[700]
           [.auth-dialog_&_h2]:leading-[20px] [&_small]:text-[#a884dc] [&_small]:mt-1 [&_small]:text-[10px]
-          [&_small]:font-[800] [&_small]:block auth-identity`}
+          [&_small]:font-[600] [&_small]:block auth-identity`}
             >
               <span
                 className={`[background:linear-gradient(40deg,#8b5ad1,#6230aa)] rounded-[12px] shrink-0 [place-items:center] w-8
@@ -260,7 +260,7 @@ export function Modal({ title, kind = '', onClose, children }) {
 }
 export function ErrorText({ message }) {
   return message ? (
-    <p role="alert" className={'text-[#b42318] m-[12px_0] text-[12px] leading-[1.7] form-error'}>
+    <p role="alert" className={'text-[#b42318] m-[12px_0] text-[16px] leading-[1.7] form-error'}>
       {message}
     </p>
   ) : null;
@@ -278,12 +278,12 @@ export function Action({ children, onClick, primary = false, ...props }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[14px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand

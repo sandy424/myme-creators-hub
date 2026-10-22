@@ -16,19 +16,19 @@ export function Team() {
       <section
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] mt-5 [&_h1]:m-[0_0_8px] [&_h1]:text-[23px]
-          [&_h1]:font-[900] panel team-welcome`}
+          [&_h1]:font-[700] panel team-welcome`}
       >
         <h1>{user.name}님의 협력·커리어</h1>
         <p
-          className={`text-muted text-[12px]
+          className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
         >
           일정과 작업은 팀이 선택한 외부 도구에서 관리합니다.
         </p>
@@ -53,14 +53,14 @@ export function Team() {
         </div>
       </section>
       <div
-        className={`[&_h2]:m-[0_0_12px] [&_h2]:text-[17px] grid-cols-[1.35fr_1fr] gap-5.5 mt-6.5 grid
+        className={`[&_h2]:m-[0_0_12px] [&_h2]:text-[20px] grid-cols-[1.35fr_1fr] gap-5.5 mt-6.5 grid
           max-[900px]:gap-4
           max-[650px]:grid-cols-[1fr] original-columns`}
       >
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -69,9 +69,9 @@ export function Team() {
           {state.projects.map((p) => (
             <a
               className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] p-[20px_0] block
-          [&:hover_h3]:text-[#8b5ad1] [&_strong]:text-[#1a0f2a] [&_strong]:text-[11px] [&_h3]:m-[8px_0]
-          [&_h3]:text-[15px] [&_p]:text-[#564c64] [&_p]:m-[4px_0] [&_p]:text-[12px] [&_p]:leading-[1.8]
-          [&_small]:text-[#746788] [&_small]:text-[10px] original-post`}
+          [&:hover_h3]:text-[#8b5ad1] [&_strong]:text-[#1a0f2a] [&_strong]:text-[14px] [&_h3]:m-[8px_0]
+          [&_h3]:text-[16px] [&_p]:text-[#564c64] [&_p]:m-[4px_0] [&_p]:text-[16px] [&_p]:leading-[1.8]
+          [&_small]:text-[#746788] [&_small]:text-[12px] original-post`}
               href={'#projects/' + p.id}
               key={p.id}
             >
@@ -82,11 +82,11 @@ export function Team() {
           ))}
           {!state.projects.length && (
             <p
-              className={`text-muted text-[12px]
+              className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
             >
               아직 등록된 프로젝트가 없습니다.
             </p>
@@ -95,7 +95,7 @@ export function Team() {
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -104,9 +104,9 @@ export function Team() {
           {state.career.map((c) => (
             <div
               className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] p-[20px_0] block
-          [&:hover_h3]:text-[#8b5ad1] [&_strong]:text-[#1a0f2a] [&_strong]:text-[11px] [&_h3]:m-[8px_0]
-          [&_h3]:text-[15px] [&_p]:text-[#564c64] [&_p]:m-[4px_0] [&_p]:text-[12px] [&_p]:leading-[1.8]
-          [&_small]:text-[#746788] [&_small]:text-[10px] original-post`}
+          [&:hover_h3]:text-[#8b5ad1] [&_strong]:text-[#1a0f2a] [&_strong]:text-[14px] [&_h3]:m-[8px_0]
+          [&_h3]:text-[16px] [&_p]:text-[#564c64] [&_p]:m-[4px_0] [&_p]:text-[16px] [&_p]:leading-[1.8]
+          [&_small]:text-[#746788] [&_small]:text-[12px] original-post`}
               key={c.id}
             >
               <h3>{c.title}</h3>
@@ -115,35 +115,20 @@ export function Team() {
           ))}
           {!state.career.length && (
             <p
-              className={`text-muted text-[12px]
+              className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
             >
               첫 경력을 등록해 보세요.
             </p>
           )}
         </section>
       </div>
-      <section
-        className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
-          shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
-          [.original-columns_&]:[align-self:stretch]
-          [.original-columns_&]:min-w-0
-          [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
-      >
-        <h2>품앗이 요청</h2>
-        <p
-          className={`text-muted text-[12px]
-          [.team-welcome_&]:m-[0_0_15px]
-          [.member-card-actions_&]:m-[5px]
-          [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
-        >
-          등록된 요청이 없습니다.
-        </p>
+      <section className="mt-6 rounded-[22px] border border-solid border-line bg-white p-7 shadow-[0_5px_24px_#3a215d03] max-[650px]:p-[23px]">
+        <h2 className="mb-3 mt-0 text-[20px]">품앗이 요청</h2>
+        <p className="m-0 text-sm leading-relaxed text-muted">등록된 요청이 없습니다.</p>
       </section>
     </>
   );
@@ -153,18 +138,18 @@ export function Projects({ id }) {
   const p = state.projects.find((p) => p.id === Number(id)) || state.projects[0];
   return (
     <>
-      <p className={'text-muted m-[15px_0_25px] text-[12px] breadcrumb'}>
+      <p className={'text-muted m-[15px_0_25px] text-[16px] breadcrumb'}>
         <a href="#team">팀협업</a> / 프로젝트
       </p>
       <div
         className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]
-          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[12px]
+          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[16px]
           [.project-workspaces_&]:items-center
           max-[760px]:[.project-workspaces_&]:flex-wrap
           max-[760px]:[.project-workspaces_&]:items-start
           [.original-columns_&_h2]:m-[0]
-          [.original-columns_&_h2]:text-[17px]
+          [.original-columns_&_h2]:text-[20px]
           [.original-columns_&]:mb-5 sectionhead`}
       >
         <h1
@@ -178,7 +163,7 @@ export function Projects({ id }) {
           ＋ 프로젝트 추가
         </Action>
       </div>
-      <p className={'text-muted mt-[0] text-[13px] intro'}>
+      <p className={'text-muted mt-[0] text-[16px] intro'}>
         프로젝트를 등록하고 팀에서 사용하는 작업 공간을 연결하세요.
       </p>
       <div className={'gap-[12px] m-[24px_0] p-[4px_2px_10px] flex overflow-x-auto project-picker'}>
@@ -189,8 +174,8 @@ export function Projects({ id }) {
               `[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[16px]
           flex-col flex-1 gap-[9px]
           min-w-57.5
-          max-w-75 p-4.5 flex [&_strong]:[overflow-wrap:anywhere] [&_strong]:text-[15px] [&_small]:text-muted
-          [&_small]:text-[11px] project-choice ` +
+          max-w-75 p-4.5 flex [&_strong]:[overflow-wrap:anywhere] [&_strong]:text-[16px] [&_small]:text-muted
+          [&_small]:text-[14px] project-choice ` +
               (p.id === Number(id)
                 ? `[.project-choice&]:[background:#f6f6f7]
           [.project-choice&]:[border-width:2px]
@@ -207,7 +192,7 @@ export function Projects({ id }) {
           >
             <span
               className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
@@ -223,7 +208,7 @@ export function Projects({ id }) {
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -231,17 +216,17 @@ export function Projects({ id }) {
           <div
             className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]
-          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[12px]
+          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[16px]
           [.project-workspaces_&]:items-center
           max-[760px]:[.project-workspaces_&]:flex-wrap
           max-[760px]:[.project-workspaces_&]:items-start
           [.original-columns_&_h2]:m-[0]
-          [.original-columns_&_h2]:text-[17px]
+          [.original-columns_&_h2]:text-[20px]
           [.original-columns_&]:mb-5 sectionhead`}
           >
             <span
               className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
-          rounded-[5px] p-[3px_8px] text-[10px] font-[700] inline-block
+          rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
@@ -252,50 +237,50 @@ export function Projects({ id }) {
               <Action onClick={() => open('project-editor', { id: p.id })}>프로젝트 수정</Action>
             ) : (
               <span
-                className={`text-muted text-[12px]
+                className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
               >
                 작성자만 수정할 수 있습니다.
               </span>
             )}
           </div>
           <h2>{p.title}</h2>
-          <p className={'whitespace-pre-wrap text-muted mt-[0] text-[13px] intro'}>{p.summary}</p>
+          <p className={'whitespace-pre-wrap text-muted mt-[0] text-[16px] intro'}>{p.summary}</p>
           <p
-            className={`text-muted text-[12px]
+            className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
           >
             {p.members || '팀 구성 미입력'} · {p.state}
           </p>
           <section
             className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] mt-6.5 pt-[23px]
-          [&_h3]:text-[17px] project-workspaces`}
+          [&_h3]:text-[20px] project-workspaces`}
           >
             <div
               className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]
-          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[12px]
+          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[16px]
           [.project-workspaces_&]:items-center
           max-[760px]:[.project-workspaces_&]:flex-wrap
           max-[760px]:[.project-workspaces_&]:items-start
           [.original-columns_&_h2]:m-[0]
-          [.original-columns_&_h2]:text-[17px]
+          [.original-columns_&_h2]:text-[20px]
           [.original-columns_&]:mb-5 sectionhead`}
             >
               <div>
                 <h3>팀 작업 공간</h3>
                 <p
-                  className={`text-muted text-[12px]
+                  className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
                 >
                   {p.title}에서 사용하는 도구를 한곳에 모으세요.
                 </p>
@@ -348,7 +333,7 @@ export function Projects({ id }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] empty`}
               >
                 첫 번째 작업 공간을 등록해 보세요.
@@ -360,7 +345,7 @@ export function Projects({ id }) {
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -372,7 +357,7 @@ export function Projects({ id }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
         >
           등록된 프로젝트가 없습니다. 새 프로젝트를 추가해 보세요.
@@ -382,9 +367,22 @@ export function Projects({ id }) {
   );
 }
 export function ProjectEditor({ project, onClose }) {
-  const { action, navigate } = useHub(),
+  const { action, navigate, state } = useHub(),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false);
+  const colleagues = state.members.filter((member) => member.status === '동료');
+  const [selectedIds, setSelectedIds] = useState(() =>
+    (project?.teamMembers || []).map((member) => member.id),
+  );
+  const legacyMembers =
+    project?.legacyMembers ?? (project?.teamMembers ? '' : project?.members || '');
+  const [keepLegacy, setKeepLegacy] = useState(true);
+  const options = [
+    ...colleagues,
+    ...(project?.teamMembers || []).filter(
+      (member) => !colleagues.some((peer) => peer.id === member.id),
+    ),
+  ];
   async function submit(e) {
     e.preventDefault();
     setBusy(true);
@@ -393,6 +391,10 @@ export function ProjectEditor({ project, onClose }) {
         ...Object.fromEntries(new FormData(e.currentTarget)),
         id: project?.id,
         links: project?.links || [],
+        teamMembers: options
+          .filter((member) => selectedIds.includes(member.id))
+          .map(({ id, name }) => ({ id, name })),
+        legacyMembers: keepLegacy ? legacyMembers : '',
       });
       navigate('#projects/' + result.id);
       onClose();
@@ -405,11 +407,11 @@ export function ProjectEditor({ project, onClose }) {
   return (
     <Modal title={project ? '프로젝트 수정' : '새 프로젝트 등록'} onClose={onClose}>
       <p
-        className={`text-muted text-[12px]
+        className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
       >
         프로젝트는 로그인 회원에게 공개되며 작성자만 수정할 수 있습니다.
       </p>
@@ -436,10 +438,70 @@ export function ProjectEditor({ project, onClose }) {
             ))}
           </select>
         </label>
-        <label>
-          팀 구성 (선택)
-          <input name="members" maxLength={200} defaultValue={project?.members} />
-        </label>
+        <fieldset className="mx-0 mb-0 mt-4 min-w-0 border-0 p-0">
+          <legend className="p-0 text-sm font-semibold">팀 구성 (선택)</legend>
+          <p className="mb-3 mt-0 text-sm text-muted">
+            함께할 동료를 선택해 주세요. 여러 명을 선택할 수 있습니다.
+          </p>
+          <select
+            aria-label="팀 구성 동료 선택"
+            value=""
+            disabled={!colleagues.some((member) => !selectedIds.includes(member.id))}
+            onChange={(event) => {
+              const id = Number(event.target.value);
+              if (id) setSelectedIds((ids) => (ids.includes(id) ? ids : [...ids, id]));
+            }}
+          >
+            <option value="">함께할 동료를 선택해 주세요</option>
+            {colleagues
+              .filter((member) => !selectedIds.includes(member.id))
+              .map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name}
+                  {member.role ? ` / ${member.role}` : ''}
+                </option>
+              ))}
+          </select>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {options
+              .filter((member) => selectedIds.includes(member.id))
+              .map((member) => (
+                <span
+                  key={member.id}
+                  className="inline-flex items-center gap-2 rounded-full bg-brand/10 py-1 pl-3 pr-1 text-sm text-brand"
+                >
+                  {member.name}
+                  <button
+                    type="button"
+                    aria-label={`${member.name} 팀원 제거`}
+                    onClick={() => setSelectedIds((ids) => ids.filter((id) => id !== member.id))}
+                    className="grid h-7 w-7 place-items-center rounded-full border-0 bg-transparent p-0 text-brand hover:bg-brand/10"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+          </div>
+          {!colleagues.length && (
+            <p className="my-2 text-sm font-normal text-muted">
+              선택할 동료가 없습니다. 동료 찾기에서 동료를 맺으면 여기에 표시됩니다.
+            </p>
+          )}
+          {legacyMembers && (
+            <label className="mt-3 flex items-start gap-2 border-0 border-t border-solid border-line pt-3 text-sm font-normal">
+              <input
+                type="checkbox"
+                checked={keepLegacy}
+                onChange={(event) => setKeepLegacy(event.target.checked)}
+                className="m-0! mt-1! h-4 w-4 shrink-0 accent-brand"
+              />
+              <span>기존 직접 입력 정보 유지: {legacyMembers}</span>
+            </label>
+          )}
+          <p className="mb-0 mt-3 text-xs font-normal text-muted" role="status">
+            {selectedIds.length}명 선택됨 · 프로젝트 수정 권한은 작성자에게만 있습니다.
+          </p>
+        </fieldset>
         <ErrorText message={error} />
         <div
           className={`mt-5 flex-wrap gap-2.5 flex
@@ -458,12 +520,12 @@ export function ProjectEditor({ project, onClose }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[14px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand
@@ -529,12 +591,12 @@ export function LinkEditor({ project, onClose }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[14px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand

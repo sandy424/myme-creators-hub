@@ -23,13 +23,13 @@ export function Board({ category = '전체' }) {
   return (
     <>
       <p
-        className={`tracking-[1.6px] text-[#8665b5] text-[11px] font-[800]
+        className={`tracking-[1.6px] text-[#8665b5] text-[14px] font-[600]
           [.original-welcome_&]:text-[#bbb2c9]
           [.original-welcome_&]:tracking-[1.7px]
           [.original-welcome_&]:m-[0_0_20px]
-          [.original-welcome_&]:text-[10px]
+          [.original-welcome_&]:text-[12px]
           max-[650px]:[.original-welcome_&]:tracking-[1px]
-          max-[650px]:[.original-welcome_&]:text-[9px] eyebrow`}
+          max-[650px]:[.original-welcome_&]:text-[12px] eyebrow`}
       >
         COMMUNITY
       </p>
@@ -38,7 +38,7 @@ export function Board({ category = '전체' }) {
       >
         함께 나누는 크리에이터 이야기
       </h1>
-      <p className={'text-muted mt-[0] text-[13px] intro'}>
+      <p className={'text-muted mt-[0] text-[16px] intro'}>
         궁금한 점을 묻고, 개발 경험과 작품을 공유해 보세요.
       </p>
       <div
@@ -69,7 +69,7 @@ export function Board({ category = '전체' }) {
       </div>
       <div
         className={`flex-wrap gap-[7px] m-[18px_0] flex [&_button]:bg-white [&_button]:rounded-[20px]
-          [&_button]:p-[7px_15px] [&_button]:text-[12px] tabs`}
+          [&_button]:p-[7px_15px] [&_button]:text-[16px] tabs`}
       >
         {categories.map((c) => (
           <button
@@ -96,7 +96,7 @@ export function Board({ category = '전체' }) {
           rounded-[22px] mb-3 p-[21px_23px] [transition:transform_.15s,border-color_.15s] block
           shadow-[0_3px_10px_#1a0f2a04] hover:[border-color:#ccb6eb] hover:[transform:translateY(-2px)]
           hover:shadow-[0_7px_20px_#8b5ad10a] [&_h3]:m-[9px_0_5px] [&_h3]:text-[16px] [&_p]:text-muted
-          [&_p]:m-[0_0_14px] [&_p]:text-[12px] post`}
+          [&_p]:m-[0_0_14px] [&_p]:text-[16px] post`}
           href={'#post/' + p.id}
           key={p.id}
         >
@@ -108,7 +108,7 @@ export function Board({ category = '전체' }) {
           </p>
           <div
             className={
-              'text-[#948ba0] justify-between gap-[10px] text-[10px] flex max-[760px]:text-[9px] postmeta'
+              'text-[#948ba0] justify-between gap-[10px] text-[12px] flex max-[760px]:text-[12px] postmeta'
             }
           >
             <span>{p.author} · 회원 공유</span>
@@ -122,7 +122,7 @@ export function Board({ category = '전체' }) {
         <div
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -134,7 +134,7 @@ export function Board({ category = '전체' }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
         >
           조건에 맞는 글이 없습니다.
@@ -175,13 +175,13 @@ export function WritePost({ category = '전체' }) {
       className={`max-w-212.5 m-auto [&_h1]:m-[14px_0] [&_h1]:text-[29px] [&_h1]:leading-[1.4]
           max-[760px]:[&_h1]:text-[24px] article`}
     >
-      <div className={'text-muted m-[15px_0_25px] text-[12px] breadcrumb'}>
+      <div className={'text-muted m-[15px_0_25px] text-[16px] breadcrumb'}>
         <a href={boardRoute}>커뮤니티</a> / 새 글 작성
       </div>
       <form
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -220,7 +220,7 @@ export function WritePost({ category = '전체' }) {
           aria-describedby="post-related-url-help"
           className="mt-1.5"
         />
-        <p id="post-related-url-help" className="mt-2 text-xs leading-relaxed text-muted">
+        <p id="post-related-url-help" className="mt-2 text-sm leading-relaxed text-muted">
           공유할 파일·자료·작품의 HTTPS 주소를 입력해 주세요.
         </p>
         <AttachmentPicker
@@ -230,11 +230,11 @@ export function WritePost({ category = '전체' }) {
           onReadingChange={setReadingFiles}
         />
         <p
-          className={`text-muted text-[12px]
+          className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
         >
           등록한 글은 다른 로그인 회원에게 공개됩니다.
         </p>
@@ -242,7 +242,7 @@ export function WritePost({ category = '전체' }) {
         <div className="mt-6 flex items-center justify-end gap-3 pt-5">
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-5 py-2.5 text-sm font-semibold text-ink hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink disabled:cursor-wait"
+            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-5 py-2.5 text-base font-semibold text-ink hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink disabled:cursor-wait"
             onClick={() => navigate(boardRoute)}
             disabled={busy || readingFiles}
           >
@@ -250,7 +250,7 @@ export function WritePost({ category = '전체' }) {
           </button>
           <button
             type="submit"
-            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-brand bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:border-[#6e43c5] hover:bg-[#6e43c5] hover:text-white disabled:cursor-wait"
+            className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-brand bg-brand px-5 py-2.5 text-base font-semibold text-white shadow-sm hover:border-[#6e43c5] hover:bg-[#6e43c5] hover:text-white disabled:cursor-wait"
             disabled={busy || readingFiles}
           >
             {busy ? '등록 중…' : readingFiles ? '파일 준비 중…' : '등록'}
@@ -296,7 +296,7 @@ function ReplyForm({ postId, target, onDone }) {
           [.reply_>_&]:[border-color:#e9e7eb]
           [.reply_>_&]:rounded-[10px]
           [.reply_>_&]:m-[10px_0_16px]
-          [.reply_>_&]:p-3.5 [&[hidden]]:hidden [&_label]:m-[0] [&_label]:text-[12px] [&_textarea]:mt-2
+          [.reply_>_&]:p-3.5 [&[hidden]]:hidden [&_label]:m-[0] [&_label]:text-[16px] [&_textarea]:mt-2
           replyform`
           : 'comment-form'
       }
@@ -316,7 +316,7 @@ function ReplyForm({ postId, target, onDone }) {
       <ErrorText message={error} />
       <div
         className={`justify-end gap-2 flex
-          max-[600px]:flex-wrap [&_button]:p-[8px_13px] [&_button]:text-[12px]
+          max-[600px]:flex-wrap [&_button]:p-[8px_13px] [&_button]:text-[16px]
           [.replyform_&_button]:mt-[8px] reply-actions`}
       >
         <button
@@ -328,12 +328,12 @@ function ReplyForm({ postId, target, onDone }) {
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[14px]
           [.original-programs_&]:rounded-[12px]
-          [.original-programs_&]:text-[12px]
+          [.original-programs_&]:text-[16px]
           [.team-welcome_&]:rounded-[12px]
           [.team-welcome_&]:p-[10px_15px]
-          [.team-welcome_&]:text-[12px]
+          [.team-welcome_&]:text-[16px]
           [.public-profile-actions_&]:flex-1
           [.original-welcome_button&]:text-white
           [.original-welcome_button&]:bg-brand
@@ -371,7 +371,7 @@ function Comment({ comment, postId, nested = false }) {
           max-[600px]:[.comment_>_&]:ml-3.5
           max-[600px]:[.comment_>_&]:p-3 [&_p]:whitespace-pre-wrap [&_p]:[overflow-wrap:anywhere] reply`
           : `[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] p-[20px_0]
-          [&_p]:m-[9px_0] [&_p]:text-[13px] comment`
+          [&_p]:m-[9px_0] [&_p]:text-[16px] comment`
       }
     >
       <strong>{comment.name}</strong>
@@ -384,7 +384,7 @@ function Comment({ comment, postId, nested = false }) {
       <button
         type="button"
         className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#e2e1e4]
-          rounded-[7px] items-center m-[3px_0_8px] p-[5px_10px] text-[11px] font-[700] inline-flex
+          rounded-[7px] items-center m-[3px_0_8px] p-[5px_10px] text-[14px] font-[700] inline-flex
           hover:text-[#5f30a3] hover:[background:#efeef1] [&[aria-expanded='true']]:text-[#5f30a3]
           [&[aria-expanded='true']]:[background:#efeef1] reply-button`}
         aria-expanded={replying}
@@ -417,7 +417,7 @@ export function PostDetail({ id }) {
       <div
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px]
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] text-center text-muted p-[35px]
@@ -429,7 +429,7 @@ export function PostDetail({ id }) {
           [.original-columns_&]:rounded-[13px]
           [.original-columns_&]:m-[0_0_18px]
           [.original-columns_&]:p-[42px_12px]
-          [.original-columns_&]:text-[12px]
+          [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
       >
         게시물을 찾을 수 없습니다. <a href="#board">목록으로</a>
@@ -440,13 +440,13 @@ export function PostDetail({ id }) {
       className={`max-w-212.5 m-auto [&_h1]:m-[14px_0] [&_h1]:text-[29px] [&_h1]:leading-[1.4]
           max-[760px]:[&_h1]:text-[24px] article`}
     >
-      <div className={'text-muted m-[15px_0_25px] text-[12px] breadcrumb'}>
+      <div className={'text-muted m-[15px_0_25px] text-[16px] breadcrumb'}>
         <a href="#board">커뮤니티</a> / {p.category}
       </div>
       <article
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -458,17 +458,17 @@ export function PostDetail({ id }) {
           <div>
             <strong>{p.author}</strong>
             <div
-              className={`text-muted text-[12px]
+              className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
             >
               로그인 회원에게 공유된 게시글
             </div>
           </div>
         </div>
-        <div className={'whitespace-pre-wrap p-[30px_0] text-[15px] leading-[2] articlebody'}>
+        <div className={'whitespace-pre-wrap p-[30px_0] text-[16px] leading-[2] articlebody'}>
           {p.body}
         </div>
         <AttachmentDownloads files={p.attachments} />
@@ -493,8 +493,8 @@ export function PostDetail({ id }) {
               />
             </svg>
             <span className="min-w-0 flex-1">
-              <strong className="block text-sm">관련 파일·자료 보기</strong>
-              <span className="mt-1 block break-all text-xs text-muted">{relatedUrl}</span>
+              <strong className="block text-base">관련 파일·자료 보기</strong>
+              <span className="mt-1 block break-all text-sm text-muted">{relatedUrl}</span>
             </span>
             <span className="shrink-0 text-brand" aria-hidden="true">
               ↗
@@ -505,12 +505,12 @@ export function PostDetail({ id }) {
         <div
           className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
           [&_h2]:text-[21px]
-          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[12px]
+          max-[760px]:[&_h2]:text-[19px] [&_small]:text-muted [&_small]:text-[16px]
           [.project-workspaces_&]:items-center
           max-[760px]:[.project-workspaces_&]:flex-wrap
           max-[760px]:[.project-workspaces_&]:items-start
           [.original-columns_&_h2]:m-[0]
-          [.original-columns_&_h2]:text-[17px]
+          [.original-columns_&_h2]:text-[20px]
           [.original-columns_&]:mb-5 sectionhead`}
         >
           <Action
@@ -536,7 +536,7 @@ export function PostDetail({ id }) {
       <section
         className={`mt-5 [border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
           shadow-[0_5px_24px_#3a215d03]
-          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[15px]
+          max-[650px]:p-[23px] [&_h3]:m-[0] [&_h3]:text-[16px]
           [.original-columns_&]:[align-self:stretch]
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
@@ -547,11 +547,11 @@ export function PostDetail({ id }) {
         ))}
         {!p.comments.length && (
           <p
-            className={`text-muted text-[12px]
+            className={`text-muted text-[16px]
           [.team-welcome_&]:m-[0_0_15px]
           [.member-card-actions_&]:m-[5px]
           [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[12px] muted`}
+          [.original-programs_&]:text-[16px] muted`}
           >
             첫 댓글로 이야기를 시작해 보세요.
           </p>
@@ -561,7 +561,7 @@ export function PostDetail({ id }) {
       <p>
         <a
           className={`text-[#8b7e9e] [background:0_0] [border-width:0] [border-style:none] [border-color:currentColor] p-1
-          text-[12px] textlink`}
+          text-[16px] textlink`}
           href="#board"
         >
           ← 게시판 목록으로

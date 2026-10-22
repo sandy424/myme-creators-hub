@@ -27,7 +27,7 @@ export default function CountrySelect({ value, onChange }) {
     <div
       className={`min-w-0
           [.auth-dialog_&_input[type='hidden']]:hidden [&_>_small]:text-[#746788] [&_>_small]:mt-[5px]
-          [&_>_small]:text-[10px] [&_>_small]:leading-[1.5] [&_>_small]:block
+          [&_>_small]:text-[12px] [&_>_small]:leading-[1.5] [&_>_small]:block
           [.auth-dialog_.signup-grid_&_input]:mt-1
           [.profile-dialog_&]:mt-4 signup-country`}
       onBlur={(e) => {
@@ -80,10 +80,10 @@ export default function CountrySelect({ value, onChange }) {
           max-h-40 mt-[5px] p-1 overflow-y-auto [&[hidden]]:hidden [&_button]:text-left
           [&_button]:text-[#423a4e] [&_button]:[background:0_0] [&_button]:[border-width:0]
           [&_button]:[border-style:none] [&_button]:[border-color:currentColor] [&_button]:rounded-[6px]
-          [&_button]:w-full [&_button]:p-[8px_10px] [&_button]:text-[12px] [&_button]:font-[500]
+          [&_button]:w-full [&_button]:p-[8px_10px] [&_button]:text-[16px] [&_button]:font-[500]
           [&_button]:block [&_button:hover]:text-[#743ac8] [&_button:hover]:[background:#f6f6f7]
           [&_button[aria-selected='true']]:text-[#743ac8] [&_button[aria-selected='true']]:[background:#efeef1]
-          [&_button[aria-selected='true']]:font-[800] [&_p]:text-[#746788] [&_p]:p-2 [&_p]:text-[11px]
+          [&_button[aria-selected='true']]:font-[600] [&_p]:text-[#746788] [&_p]:p-2 [&_p]:text-[14px]
           [.auth-dialog_&_button]:min-h-0 signup-country-list`}
           id={id + '-list'}
           role="listbox"
