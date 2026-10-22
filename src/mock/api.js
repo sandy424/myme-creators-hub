@@ -1,6 +1,7 @@
 import { normalizeHttpsLink } from '../links.js';
 import { validateAttachments } from '../attachments.js';
 import { buildNotices } from './notices.js';
+import { getChatLanguage } from '../languages.js';
 
 // Browser-local UI adapter. No real backend is needed, and no data is pre-seeded.
 // This is not production authentication. Use fictitious test credentials only.
@@ -138,6 +139,7 @@ async function runMockApi(action, body) {
           role: body.role || '',
           country: body.country || '',
           languages: body.languages || '',
+          chatLanguage: getChatLanguage(body),
           bio: '',
           portfolio: '',
           photo: '',
@@ -335,6 +337,7 @@ async function runMockApi(action, body) {
   if (action === 'send-message') {
     const p = peer();
     if (!body.text?.trim()) fail('메시지를 입력해 주세요.');
+    if (body.text.length > 2000) fail('메시지는 2,000자 이내로 입력해 주세요.');
     const id = db.nextId++;
     db.messages.push({
       id,

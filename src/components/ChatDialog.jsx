@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHub } from '../HubContext';
 import { Modal, Avatar, ErrorText } from './UI';
-import { languages } from '../api';
+import { getChatLanguage, languages } from '../languages';
 import { useReadNotices } from '../useReadNotices';
+import TranslatedMessage from './TranslatedMessage';
 export default function ChatDialog({ initialId, onClose }) {
-  const { state, action } = useHub(),
+  const { state, action, user } = useHub(),
     [selected, setSelected] = useState(initialId),
     [text, setText] = useState(''),
-    [language, setLanguage] = useState('ko'),
     [busy, setBusy] = useState(false),
     [error, setError] = useState('');
+  const language = getChatLanguage(user);
+  const messageLog = useRef(null);
+  const followMessages = useRef(true);
   const peers = state.members.filter(
       (m) =>
         m.status === '동료' ||
@@ -18,6 +21,13 @@ export default function ChatDialog({ initialId, onClose }) {
     ),
     peer = state.members.find((m) => m.id === Number(selected)) || peers[0],
     messages = peer ? state.chats[peer.id] || [] : [];
+  useEffect(() => {
+    followMessages.current = true;
+  }, [peer?.id]);
+  useEffect(() => {
+    if (messageLog.current && followMessages.current)
+      messageLog.current.scrollTop = messageLog.current.scrollHeight;
+  }, [peer?.id, messages.at(-1)?.id]);
   useReadNotices(
     state.notices
       .filter((notice) => !notice.read && notice.type === 'message' && notice.peerId === peer?.id)
@@ -25,6 +35,8 @@ export default function ChatDialog({ initialId, onClose }) {
   );
   async function submit(e) {
     e.preventDefault();
+    if (busy || !peer || !text.trim()) return;
+    followMessages.current = true;
     setBusy(true);
     try {
       await action('send-message', { peerId: peer.id, text, lang: language });
@@ -152,23 +164,17 @@ export default function ChatDialog({ initialId, onClose }) {
                     <small>1:1 대화</small>
                   </div>
                 </div>
-                <label>
-                  번역 언어
-                  <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-                    {Object.entries(languages).map(([code, name]) => (
-                      <option key={code} value={code}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <span className="rounded-full bg-brand/10 px-3 py-1.5 text-[10px] font-semibold text-brand">
+                  {languages[language]} 자동 번역
+                </span>
               </div>
               <div
                 className={`text-[#746788] [background:#fafafa] [border-bottom-width:1px] [border-bottom-style:solid]
           [border-bottom-color:#f5f4f6] p-[9px_18px] text-[10px] leading-[1.7] [&_span]:text-[#a17ada]
           [&_span]:mr-[7px] [&_span]:font-[750] chat-offline`}
               >
-                <span>메시지</span> 자동 번역은 아직 연결되지 않았습니다.
+                받은 메시지를 {languages[language]}로 자동 번역합니다. 언어는 프로필에서 변경할 수
+                있어요.
               </div>
               <div
                 className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] [background:#fafafa]
@@ -186,6 +192,11 @@ export default function ChatDialog({ initialId, onClose }) {
           max-[760px]:[.chat-dialog_&]:p-[15px] chat-messages`}
                 role="log"
                 aria-label="대화 내역"
+                ref={messageLog}
+                onScroll={(event) => {
+                  const log = event.currentTarget;
+                  followMessages.current = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
+                }}
               >
                 {messages.map((m) => (
                   <div
@@ -221,7 +232,11 @@ export default function ChatDialog({ initialId, onClose }) {
                     }
                     key={m.id}
                   >
-                    <p>{m.text}</p>
+                    {m.mine ? (
+                      <p>{m.text}</p>
+                    ) : (
+                      <TranslatedMessage text={m.text} language={language} accountId={user?.id} />
+                    )}
                     <small>
                       {new Date(m.time).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',

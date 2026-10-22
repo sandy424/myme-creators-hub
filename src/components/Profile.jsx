@@ -4,6 +4,7 @@ import CountrySelect, { exactCountry } from './CountrySelect';
 import { publicOptions, safeUrl } from '../api';
 import { Check } from './AuthDialog';
 import { prepareProfilePhoto, PROFILE_PHOTO_ACCEPT } from '../profilePhoto';
+import { getChatLanguage, languages } from '../languages';
 export default function ProfileDialog({ user, onClose, onSave }) {
   const [country, setCountry] = useState(user.country || ''),
     [photo, setPhoto] = useState(user.photo || ''),
@@ -40,6 +41,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
         portfolio: portfolio ? safeUrl(portfolio) : '',
         country: c,
         languages: String(f.get('languages')).trim(),
+        chatLanguage: String(f.get('chatLanguage')),
         photo,
         publicFields: f.getAll('publicFields'),
         sharedDiscovery: f.has('sharedDiscovery'),
@@ -160,6 +162,24 @@ export default function ProfileDialog({ user, onClose, onSave }) {
           활동 언어
           <input name="languages" maxLength={200} defaultValue={user.languages} />
         </label>
+        <label>
+          메시지 수신 언어
+          <select
+            name="chatLanguage"
+            defaultValue={getChatLanguage(user)}
+            className="mt-1.5"
+            aria-describedby="chat-language-help"
+          >
+            {Object.entries(languages).map(([code, name]) => (
+              <option key={code} value={code}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p id="chat-language-help" className="mt-2 text-xs leading-relaxed text-muted">
+          채팅에서 받은 메시지를 이 언어로 자동 번역합니다.
+        </p>
         <Check name="sharedDiscovery" defaultChecked={user.sharedDiscovery}>
           다른 로그인 회원의 동료 찾기에 내 프로필 공개
         </Check>
@@ -201,14 +221,14 @@ export default function ProfileDialog({ user, onClose, onSave }) {
         <button
           type="submit"
           disabled={busy || reading}
-          className={`bg-brand text-white [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
+          className={`bg-brand text-white mt-4 px-4 py-2 text-base font-semibold [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
           hover:[background:#7942c7]
           [.original-columns_&]:text-[#8463b4]
           [.original-columns_&]:[background:#f3f3f4]
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
-          [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:p-[7px_13px]
+          [.original-columns_&]:text-[13px]
           [.original-programs_&]:rounded-[12px]
           [.original-programs_&]:text-[12px]
           [.team-welcome_&]:rounded-[12px]

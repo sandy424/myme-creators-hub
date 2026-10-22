@@ -88,6 +88,18 @@ test('React pages and dialogs render independently with empty data and with cate
       render(React.createElement(Profile, { user, onClose() {}, onSave() {} })),
       /프로필 저장/,
     );
+    assert.match(
+      render(React.createElement(Profile, { user, onClose() {}, onSave() {} })),
+      /name="chatLanguage"/,
+    );
+    state.members = [{ id: 1001, name: 'Peer', status: '동료' }];
+    state.chats = { 1001: [{ id: 1, text: 'Hello', mine: false, time: '2026-10-22T00:00:00Z' }] };
+    const chat = render(React.createElement(Chat, { initialId: 1001, onClose() {} }));
+    assert(!chat.includes('<select'));
+    assert(!chat.includes('아직 연결되지 않았습니다'));
+    assert.match(chat, /한국어 자동 번역/);
+    state.members = [];
+    state.chats = {};
     state.posts = [
       {
         id: 1,

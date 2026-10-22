@@ -125,7 +125,7 @@ export default function ActivityDialog({ kind, onClose }) {
         </p>
         <details>
           <summary>＋ 경력·작품 등록</summary>
-          <form onSubmit={saveCareer}>
+          <form onSubmit={saveCareer} >
             <label>
               작품·경력 제목
               <input name="title" required maxLength={150} />
@@ -144,14 +144,14 @@ export default function ActivityDialog({ kind, onClose }) {
             </label>
             <ErrorText message={error} />
             <button
-              className={`bg-brand text-white [border-color:var(--color-brand)] shadow-[0_4px_12px_#8b5ad11c] hover:text-white
+              className={`bg-brand text-white mt-4 rounded-lg px-3 py-2 text-xs font-semibold [border-color:var(--color-brand)] hover:text-white
           hover:[background:#7942c7]
           [.original-columns_&]:text-[#8463b4]
           [.original-columns_&]:[background:#f3f3f4]
           [.original-columns_&]:[border-color:#ebeaec]
           [.original-columns_&]:rounded-[12px]
           [.original-columns_&]:p-[9px_15px]
-          [.original-columns_&]:text-[11px]
+          [.original-columns_&]:text-[13px]
           [.original-programs_&]:rounded-[12px]
           [.original-programs_&]:text-[12px]
           [.team-welcome_&]:rounded-[12px]

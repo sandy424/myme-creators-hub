@@ -31,18 +31,7 @@ export const categories = [
   '자료 공유',
   '공지·운영 안내',
 ];
-export const languages = {
-  ko: '한국어',
-  en: 'English',
-  ja: '日本語',
-  vi: 'Tiếng Việt',
-  'zh-CN': '简体中文',
-  'zh-TW': '繁體中文',
-  es: 'Español',
-  fr: 'Français',
-  th: 'ไทย',
-  id: 'Indonesia',
-};
+export { languages } from './languages.js';
 export const publicOptions = {
   photo: '프로필 사진',
   bio: '소개글',
