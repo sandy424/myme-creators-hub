@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -15,6 +15,11 @@ export function NewsRail() {
   const [events] = useState(createExampleSchedules);
   const [api, setApi] = useState(null);
   const [index, setIndex] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const railRef = useRef(null);
+
   useEffect(() => {
     if (!api) return;
     const update = () => setIndex(api.selectedScrollSnap());
@@ -24,16 +29,47 @@ export function NewsRail() {
       api.off('select', update).off('reInit', update);
     };
   }, [api]);
+
+  useEffect(() => {
+    if (!api || !autoplay || hovered || focused) return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'hidden' || document.querySelector('dialog[open]')) return;
+      if (railRef.current?.getClientRects().length) api.scrollNext();
+    }, 3000);
+    return () => window.clearInterval(timer);
+  }, [api, index, autoplay, hovered, focused]);
+
   return (
-    <aside aria-label="행사 소식 배너" className="hidden min-w-0 self-start min-[1200px]:block">
+    <aside
+      ref={railRef}
+      aria-label="행사 소식 배너"
+      className="hidden min-w-0 self-start min-[1200px]:block"
+    >
       <Carousel
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
+        }}
         setApi={setApi}
         opts={{ align: 'start', loop: true }}
         aria-label="새로운 행사·기회"
         className="flex h-[520px] w-full flex-col overflow-hidden rounded-[24px] bg-gradient-to-b from-[#9264e4] to-[#7548c8] text-white shadow-[0_8px_24px_#8055d910]"
       >
         <div className="shrink-0 px-4 pb-3 pt-5">
-          <p className="m-0 text-xs font-semibold tracking-widest text-white/70">CREATOR NEWS</p>
+          <div className="flex items-center justify-between gap-1">
+            <p className="m-0 text-xs font-semibold tracking-widest text-white/70">CREATOR NEWS</p>
+            <button
+              type="button"
+              onClick={() => setAutoplay((playing) => !playing)}
+              aria-label={autoplay ? '행사 자동 넘김 일시정지' : '행사 자동 넘김 재생'}
+              title={autoplay ? '자동 넘김 일시정지' : '자동 넘김 재생'}
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-md border-0 bg-transparent p-0 text-xs text-white/80 hover:bg-white/15 hover:text-white"
+            >
+              <span aria-hidden="true">{autoplay ? 'Ⅱ' : '▶'}</span>
+            </button>
+          </div>
           <div className="mt-2 flex items-center gap-3">
             <img src="/assets/eventnews.png" alt="" aria-hidden="true" width="20" height="20" />
             <h2 className="m-0 text-base font-semibold">새로운 행사·기회</h2>
@@ -84,7 +120,10 @@ export function NewsRail() {
             aria-label="이전 행사 소식"
             className="static translate-y-0 border-white/30 bg-transparent text-white hover:bg-white/15 hover:text-white"
           />
-          <span className="text-xs text-white/80" aria-live="polite">
+          <span
+            className="text-xs text-white/80"
+            aria-live={autoplay && !hovered && !focused ? 'off' : 'polite'}
+          >
             {index + 1} / {events.length} · 예시 일정
           </span>
           <CarouselNext
