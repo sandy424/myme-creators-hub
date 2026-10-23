@@ -47,7 +47,13 @@ function Badges({ event, today }) {
   );
 }
 
-export default function EventsDialog({ onClose, schedules }) {
+export default function EventsDialog({
+  onClose,
+  schedules,
+  initialView = 'opportunities',
+  initialEventId,
+}) {
+  const [view, setView] = useState(initialView);
   const [today] = useState(() => dateKey(new Date()));
   const [examples] = useState(() => createExampleSchedules());
   const events = schedules ?? examples;
@@ -58,7 +64,9 @@ export default function EventsDialog({ onClose, schedules }) {
   const [type, setType] = useState('전체');
   const [recruiting, setRecruiting] = useState(false);
   const [page, setPage] = useState(1);
-  const [detail, setDetail] = useState(null);
+  const [detail, setDetail] = useState(
+    () => events.find((event) => event.id === initialEventId) || null,
+  );
   const dialog = useRef(null);
   const detailHeading = useRef(null);
   const lastCard = useRef(null);
@@ -151,7 +159,47 @@ export default function EventsDialog({ onClose, schedules }) {
             게임잼부터 창작 교육까지, 새로운 기회를 만나보세요.
           </p>
         </header>
-        {detail ? (
+        <nav aria-label="공식 기회 메뉴" className="mb-6 flex gap-2 pb-3">
+          {[
+            ['opportunities', '전체 기회'],
+            ['applications', '내 신청 내역'],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-current={view === value ? 'page' : undefined}
+              onClick={() => {
+                setView(value);
+                setDetail(null);
+              }}
+              className={`rounded-xl border-0 px-4 py-3 text-sm font-semibold ${view === value ? 'bg-brand text-white' : 'bg-brand/5 text-muted hover:bg-brand/10 hover:text-brand'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+        {view === 'applications' ? (
+          <section
+            aria-labelledby="applications-title"
+            className="rounded-2xl border border-solid border-line bg-canvas px-5 py-12 text-center"
+          >
+            <h3 id="applications-title" className="m-0 text-xl font-bold">
+              내 신청 내역
+            </h3>
+            <p className="mb-0 mt-3 text-muted">신청 내역 조회 기능을 준비하고 있어요.</p>
+            <p className="mx-auto mb-6 mt-2 max-w-md text-sm leading-relaxed text-muted">
+              현재 외부 신청 페이지의 접수 내역은 이곳에 연동되지 않습니다. 신청 여부와 결과는 해당
+              행사 운영처의 안내를 확인해 주세요.
+            </p>
+            <button
+              type="button"
+              className="rounded-xl border-0 bg-brand px-5 py-3 font-semibold text-white hover:bg-[#743ac8]"
+              onClick={() => setView('opportunities')}
+            >
+              전체 기회 둘러보기
+            </button>
+          </section>
+        ) : detail ? (
           <section aria-labelledby="event-detail-title">
             <button type="button" className={control} onClick={() => setDetail(null)}>
               ← 일정 목록으로

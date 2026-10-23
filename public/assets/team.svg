@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs><linearGradient id="team" x1="8" y1="25" x2="120" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#3028bf"/><stop offset=".5" stop-color="#6210df"/><stop offset="1" stop-color="#d500ed"/></linearGradient></defs>
+  <g stroke="url(#team)" stroke-width="10" stroke-linejoin="round">
+    <circle cx="44" cy="15" r="10"/><circle cx="84" cy="15" r="10"/>
+    <circle cx="24" cy="50" r="10"/><circle cx="104" cy="50" r="10"/>
+    <circle cx="64" cy="69" r="10"/>
+    <path d="M44 103H5V88a13 13 0 0 1 13-13h12a13 13 0 0 1 13 13v8m41 7h39V88a13 13 0 0 0-13-13H98a13 13 0 0 0-13 13v8M35 123v-16a13 13 0 0 1 13-13h32a13 13 0 0 1 13 13v16Z"/>
+  </g>
+</svg>

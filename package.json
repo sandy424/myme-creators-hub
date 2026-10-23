@@ -15,8 +15,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",

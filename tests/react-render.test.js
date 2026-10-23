@@ -9,9 +9,9 @@ test('React pages and dialogs render independently with empty data and with cate
     const { HubContext } = await vite.ssrLoadModule('/src/HubContext.js'),
       { default: Home } = await vite.ssrLoadModule('/src/pages/Home.jsx'),
       { PostDetail, WritePost } = await vite.ssrLoadModule('/src/pages/Community.jsx'),
-      { default: Auth } = await vite.ssrLoadModule('/src/components/AuthDialog.jsx'),
+      { default: Auth } = await vite.ssrLoadModule('/src/components/Auth.jsx'),
       { default: Profile } = await vite.ssrLoadModule('/src/components/Profile.jsx'),
-      { default: Chat } = await vite.ssrLoadModule('/src/components/ChatDialog.jsx'),
+      { default: Chat } = await vite.ssrLoadModule('/src/components/Chat.jsx'),
       { default: Activity } = await vite.ssrLoadModule('/src/components/PointWallet.jsx'),
       { default: HeaderActions } = await vite.ssrLoadModule('/src/components/HeaderActions.jsx'),
       { Projects, Team } = await vite.ssrLoadModule('/src/pages/Projects.jsx');

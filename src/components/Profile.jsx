@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Avatar, Action, ErrorText } from './UI';
 import CountrySelect, { exactCountry } from './CountrySelect';
 import { publicOptions, safeUrl } from '../api';
-import { Check } from './AuthDialog';
+import { Check } from './Auth';
 import { prepareProfilePhoto, PROFILE_PHOTO_ACCEPT } from '../profilePhoto';
 import { getChatLanguage, languages } from '../languages';
 export default function ProfileDialog({ user, onClose, onSave }) {

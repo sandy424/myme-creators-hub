@@ -29,6 +29,49 @@ const signup = (name, email, extra = {}) =>
     role: '개발',
     ...extra,
   });
+test('post editing preserves discussions and deletion enforces ownership and cleans related data', async () => {
+  resetMockData();
+  await signup('Author', 'author@example.test');
+  const post = await mockApi('publish-post', {
+    title: 'Original',
+    body: 'Body',
+    category: '자유게시판',
+    attachments: [],
+  });
+  await signup('Reader', 'reader@example.test');
+  await mockApi('comment', { postId: post.id, text: 'Comment' });
+  await mockApi('like', { postId: post.id, liked: true });
+  await assert.rejects(
+    () => mockApi('update-post', { id: post.id, title: 'Stolen', body: 'Body' }),
+    /작성자/,
+  );
+  await assert.rejects(() => mockApi('delete-post', { id: post.id }), /작성자/);
+  await mockApi('login', { email: 'author@example.test', password: 'test-password' });
+  await assert.rejects(
+    () => mockApi('update-post', { id: post.id, title: '', body: 'Body' }),
+    /제목/,
+  );
+  await mockApi('update-post', {
+    id: post.id,
+    title: 'Updated',
+    body: 'New body',
+    category: '개발 팁·AI 활용',
+    relatedUrl: 'https://example.com',
+    attachments: [],
+  });
+  const updated = (await mockApi('community')).posts[0];
+  assert.equal(updated.id, post.id);
+  assert.equal(updated.title, 'Updated');
+  assert.equal(updated.category, '개발 팁·AI 활용');
+  assert.equal(updated.likes, 1);
+  assert.equal(updated.comments[0].text, 'Comment');
+  await mockApi('delete-post', { id: post.id });
+  assert.equal((await mockApi('community')).posts.length, 0);
+  const db = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  assert.equal(db.comments.length, 0);
+  assert.equal(db.likes.length, 0);
+  resetMockData();
+});
 test('project teams accept colleagues, retain selections and legacy text, and allow removal', async () => {
   resetMockData();
   await signup('Owner', 'owner@example.test');

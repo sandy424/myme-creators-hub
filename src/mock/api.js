@@ -72,6 +72,7 @@ function publicMember(a) {
     fields = p.sharedDiscovery ? p.publicFields || [] : [];
   return {
     id: a.memberId,
+    accountId: a.id,
     name: p.name,
     role: p.sharedDiscovery ? p.role : '',
     initial: p.name[0],
@@ -256,12 +257,27 @@ async function runMockApi(action, body) {
     write(db);
     return { ok: true };
   }
-  if (action === 'publish-post') {
+  if (action === 'delete-post') {
+    const post = db.entities.find((entry) => entry.id === Number(body.id) && entry.kind === 'post');
+    if (!post || post.owner !== me.id) fail('작성자만 삭제할 수 있습니다.');
+    db.entities = db.entities.filter((entry) => entry !== post);
+    db.comments = db.comments.filter((comment) => comment.postId !== post.id);
+    db.likes = db.likes.filter((like) => like.postId !== post.id);
+    write(db);
+    return { ok: true };
+  }
+  if (action === 'publish-post' || action === 'update-post') {
+    const existing =
+      action === 'update-post'
+        ? db.entities.find((entry) => entry.id === Number(body.id) && entry.kind === 'post')
+        : null;
+    if (action === 'update-post' && (!existing || existing.owner !== me.id))
+      fail('작성자만 수정할 수 있습니다.');
     if (!body.title?.trim() || !body.body?.trim()) fail('제목과 본문을 입력해 주세요.');
     const relatedUrl = normalizeHttpsLink(body.relatedUrl);
     const attachments = validateAttachments(body.attachments);
-    const id = db.nextId++;
-    db.entities.push({
+    const id = existing?.id ?? db.nextId++;
+    const entry = {
       id,
       kind: 'post',
       owner: me.id,
@@ -272,7 +288,9 @@ async function runMockApi(action, body) {
         relatedUrl,
         attachments,
       },
-    });
+    };
+    if (existing) existing.payload = entry.payload;
+    else db.entities.push(entry);
     try {
       write(db);
     } catch (error) {

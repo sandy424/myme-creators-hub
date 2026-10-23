@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useHub } from '../HubContext';
 import { categories } from '../api';
-import { Tag, Avatar, Action, ErrorText } from '../components/UI';
+import { Tag, Avatar, Action, ErrorText, Modal } from '../components/UI';
 import { normalizeHttpsLink } from '../links';
-import { AttachmentPicker, AttachmentDownloads } from '../components/Attachments';
+import { AttachmentPicker, AttachmentDownloads } from '../components/FileDragandDrop';
 import { validateAttachments } from '../attachments';
 import { useReadNotices } from '../useReadNotices';
 
@@ -143,10 +143,10 @@ export function Board({ category = '전체' }) {
     </>
   );
 }
-export function WritePost({ category = '전체' }) {
+export function WritePost({ category = '전체', post }) {
   const { action, navigate } = useHub(),
     [busy, setBusy] = useState(false),
-    [attachments, setAttachments] = useState([]),
+    [attachments, setAttachments] = useState(post?.attachments || []),
     [readingFiles, setReadingFiles] = useState(false),
     [error, setError] = useState('');
   const initialCategory = writableCategories.includes(category) ? category : writableCategories[0];
@@ -162,7 +162,10 @@ export function WritePost({ category = '전체' }) {
     try {
       payload.relatedUrl = normalizeHttpsLink(payload.relatedUrl);
       payload.attachments = validateAttachments(attachments);
-      const result = await action('publish-post', payload);
+      const result = await action(post ? 'update-post' : 'publish-post', {
+        ...payload,
+        id: post?.id,
+      });
       navigate('#post/' + result.id);
     } catch (err) {
       setError(err.message);
@@ -176,7 +179,7 @@ export function WritePost({ category = '전체' }) {
           max-[760px]:[&_h1]:text-[24px] article`}
     >
       <div className={'text-muted m-[15px_0_25px] text-[16px] breadcrumb'}>
-        <a href={boardRoute}>커뮤니티</a> / 새 글 작성
+        <a href={boardRoute}>커뮤니티</a> / {post ? '게시글 수정' : '새 글 작성'}
       </div>
       <form
         className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
@@ -187,7 +190,7 @@ export function WritePost({ category = '전체' }) {
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
         onSubmit={submit}
       >
-        <h1>어떤 이야기를 나누고 싶나요?</h1>
+        <h1>{post ? '게시글 수정' : '어떤 이야기를 나누고 싶나요?'}</h1>
         <label>
           게시판
           <select name="category" defaultValue={initialCategory} className="mt-2">
@@ -198,12 +201,19 @@ export function WritePost({ category = '전체' }) {
         </label>
         <label>
           제목
-          <input name="title" required maxLength={150} placeholder="제목을 적어 주세요" />
+          <input
+            name="title"
+            required
+            maxLength={150}
+            placeholder="제목을 적어 주세요"
+            defaultValue={post?.title}
+          />
         </label>
         <label>
           본문
           <textarea
             name="body"
+            defaultValue={post?.body}
             required
             rows={10}
             maxLength={20000}
@@ -214,6 +224,7 @@ export function WritePost({ category = '전체' }) {
         <input
           id="post-related-url"
           name="relatedUrl"
+          defaultValue={post?.relatedUrl}
           type="url"
           maxLength={2000}
           placeholder="https://"
@@ -243,7 +254,7 @@ export function WritePost({ category = '전체' }) {
           <button
             type="button"
             className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-line bg-canvas px-5 py-2.5 text-base font-semibold text-ink hover:border-[#cbc4d6] hover:bg-[#eae6ef] hover:text-ink disabled:cursor-wait"
-            onClick={() => navigate(boardRoute)}
+            onClick={() => navigate(post ? '#post/' + post.id : boardRoute)}
             disabled={busy || readingFiles}
           >
             취소
@@ -253,7 +264,7 @@ export function WritePost({ category = '전체' }) {
             className="inline-flex min-h-11 min-w-24 items-center justify-center rounded-xl border border-solid border-brand bg-brand px-5 py-2.5 text-base font-semibold text-white shadow-sm hover:border-[#6e43c5] hover:bg-[#6e43c5] hover:text-white disabled:cursor-wait"
             disabled={busy || readingFiles}
           >
-            {busy ? '등록 중…' : readingFiles ? '파일 준비 중…' : '등록'}
+            {busy ? '저장 중…' : readingFiles ? '파일 준비 중…' : post ? '수정 저장' : '등록'}
           </button>
         </div>
       </form>
@@ -399,7 +410,23 @@ function Comment({ comment, postId, nested = false }) {
   );
 }
 export function PostDetail({ id }) {
-  const { state, action, notify } = useHub();
+  const { state, action, notify, navigate } = useHub();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+  async function deletePost() {
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      await action('delete-post', { id: p.id });
+      navigate('#board/' + encodeURIComponent(p.category));
+      notify('게시글을 삭제했습니다.');
+    } catch (error) {
+      setDeleteError(error.message);
+    } finally {
+      setDeleting(false);
+    }
+  }
   const p = state.posts.find((p) => p.id === Number(id));
   useReadNotices(
     state.notices
@@ -451,7 +478,53 @@ export function PostDetail({ id }) {
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
       >
-        <Tag category={p.category} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Tag category={p.category} />
+          {p.canEdit && (
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => navigate('#edit-post/' + p.id)}
+                className="border-0 bg-transparent px-3 py-2 text-sm text-muted hover:bg-brand/5 hover:text-brand"
+              >
+                수정
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                aria-label="게시글 삭제"
+                title="게시글 삭제"
+                className="grid h-11 w-11 place-items-center border-0 bg-transparent p-2.5 hover:bg-red-50"
+              >
+                <img src="/assets/trash.svg" alt="" aria-hidden="true" className="h-6 w-6" />
+              </button>
+            </div>
+          )}
+        </div>
+        {confirmDelete && (
+          <Modal
+            title="게시글 삭제"
+            onClose={() => {
+              if (!deleting) setConfirmDelete(false);
+            }}
+          >
+            <p>게시글을 삭제할까요? 댓글과 첨부자료도 함께 삭제되며 되돌릴 수 없습니다.</p>
+            <ErrorText message={deleteError} />
+            <div className="mt-5 flex justify-end gap-2">
+              <button type="button" disabled={deleting} onClick={() => setConfirmDelete(false)}>
+                취소
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={deletePost}
+                className="border-red-600 bg-red-600 text-white hover:bg-red-700 hover:text-white"
+              >
+                {deleting ? '삭제 중…' : '삭제 확인'}
+              </button>
+            </div>
+          </Modal>
+        )}
         <h1>{p.title}</h1>
         <div className={'items-center gap-[11px] flex row'}>
           <Avatar user={{ name: p.author }} />

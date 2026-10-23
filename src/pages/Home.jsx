@@ -344,7 +344,7 @@ export default function Home() {
           max-[650px]:[&_h2]:text-[16px]
           max-[650px]:[&_h2]:leading-[1.6] panel original-programs`}
       >
-        <img src="/assets/event.png" alt="event" width="55" height="55" />
+        <img src="/assets/event.svg" alt="event" width="55" height="55" />
         <div className={'flex-1 max-[650px]:[flex:calc(100%_-_60px)] program-copy'}>
           <p
             className={
@@ -364,9 +364,18 @@ export default function Home() {
             게임잼·교육·창작 프로그램 등 새로운 도전을 확인하세요.
           </p>
         </div>
-        <Action primary onClick={() => open('programs')}>
-          공식 기회 확인
-        </Action>
+        <div className="flex shrink-0 gap-2 max-[900px]:flex-wrap max-[650px]:w-full [&>button]:whitespace-nowrap [&>button]:rounded-xl [&>button]:px-4 [&>button]:py-3 max-[650px]:[&>button]:flex-1">
+          <Action primary onClick={() => open('programs')}>
+            공식 기회 확인
+          </Action>
+          <button
+            type="button"
+            className="border border-solid border-[#dad1e7] bg-white text-[#77698b] hover:bg-brand/5 hover:text-brand"
+            onClick={() => open('programs', { initialView: 'applications' })}
+          >
+            내 신청 내역
+          </button>
+        </div>
       </section>
     </>
   );

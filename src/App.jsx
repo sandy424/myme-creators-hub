@@ -4,11 +4,12 @@ import { resetMockData, STORAGE_KEY } from './mock/api';
 import { HubContext } from './HubContext';
 import { Modal, Action } from './components/UI';
 import HeaderActions from './components/HeaderActions';
-import AuthDialog from './components/AuthDialog';
+import { NewsRail, ActivityRail } from './components/SidePanels';
+import AuthDialog from './components/Auth';
 import ProfileDialog, { PublicProfile } from './components/Profile';
-import ChatDialog from './components/ChatDialog';
+import ChatDialog from './components/Chat';
 import ActivityDialog from './components/PointWallet';
-import NoticesDialog from './components/NoticesDialog';
+import NoticesDialog from './components/Notices';
 import Home from './pages/Home';
 import { Board, WritePost, PostDetail } from './pages/Community';
 import Members from './pages/Members';
@@ -212,7 +213,16 @@ export default function App() {
     );
   else if (route[0] === 'board') page = <Board category={route[1] || '전체'} />;
   else if (route[0] === 'write') page = <WritePost key={route[1] || '전체'} category={route[1]} />;
-  else if (route[0] === 'post') page = <PostDetail id={route[1]} />;
+  else if (route[0] === 'edit-post') {
+    const post = state.posts.find((entry) => entry.id === Number(route[1]));
+    page = post?.canEdit ? (
+      <WritePost key={`edit-${post.id}`} post={post} category={post.category} />
+    ) : (
+      <p>
+        수정할 수 없는 게시글입니다. <a href="#board">목록으로</a>
+      </p>
+    );
+  } else if (route[0] === 'post') page = <PostDetail id={route[1]} />;
   else if (route[0] === 'members') page = <Members />;
   else if (route[0] === 'team') page = <Team />;
   else if (route[0] === 'projects') page = <Projects id={route[1]} />;
@@ -296,7 +306,7 @@ export default function App() {
               }
               href="#home"
             >
-              <img src="/assets/home.png" alt="" aria-hidden="true" width="20" height="20" />
+              <img src="/assets/home.svg" alt="" aria-hidden="true" width="20" height="20" />
               메인
             </a>
             <a
@@ -312,8 +322,8 @@ export default function App() {
               }
               href="#team"
             >
-              <img src="/assets/team.png" alt="" aria-hidden="true" width="20" height="20" />
-              팀협업
+              <img src="/assets/team.svg" alt="" aria-hidden="true" width="20" height="20" />
+              팀 협업
             </a>
           </nav>
           <HeaderActions
@@ -326,14 +336,13 @@ export default function App() {
           />
         </div>
       </header>
-      <main
-        className={`[max-width:1200px] [min-height:65vh] [margin:auto] [padding:18px_40px_80px]
-          max-[900px]:[padding:18px_25px_80px]
-          max-[650px]:[padding:16px_18px_65px]`}
-        id="main"
-      >
-        {page}
-      </main>
+      <div className="mx-auto grid w-full max-w-[1840px] grid-cols-[minmax(0,1fr)] items-start gap-y-6 px-10 pb-20 pt-8 min-[1000px]:grid-cols-[minmax(0,1fr)_220px] min-[1000px]:gap-x-10 min-[1200px]:grid-cols-[170px_minmax(0,1fr)_220px] min-[1500px]:grid-cols-[200px_minmax(0,1fr)_240px] min-[1500px]:gap-x-14 min-[1800px]:gap-x-16 max-[900px]:px-[25px] max-[650px]:px-[18px] max-[650px]:pb-[65px] max-[650px]:pt-6">
+        <NewsRail />
+        <main className="min-h-[65vh] min-w-0" id="main">
+          {page}
+        </main>
+        <ActivityRail />
+      </div>
       <button
         className={`z-[45] text-white bg-brand [border-width:3px] [border-style:solid] [border-color:#0000]
           rounded-[18px] items-center gap-[9px] p-[13px_18px] text-[14px] font-[600] flex fixed bottom-5.5
@@ -413,7 +422,12 @@ export default function App() {
       )}
       {modal?.type === 'link' && project && <LinkEditor project={project} onClose={close} />}
       {['career', 'wallet', 'programs', 'bounties'].includes(modal?.type) && (
-        <ActivityDialog kind={modal.type} onClose={close} />
+        <ActivityDialog
+          kind={modal.type}
+          initialView={modal.initialView}
+          initialEventId={modal.initialEventId}
+          onClose={close}
+        />
       )}
       {modal?.type === 'account' && user && (
         <Modal title="내 계정" onClose={close}>
