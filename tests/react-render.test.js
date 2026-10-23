@@ -78,7 +78,7 @@ test('React pages and dialogs render independently with empty data and with cate
         /<option selected="">자유게시판<\/option>/,
       );
     }
-    assert.match(render(React.createElement(Projects)), /등록된 프로젝트가 없습니다/);
+    assert.match(render(React.createElement(Projects)), /아직 참여 중인 프로젝트가 없습니다/);
     assert.match(render(React.createElement(Team)), /테스트님의 협력/);
     state.career = [{ id: 1, title: '첫 프로젝트', role: '개발', contribution: '기여 내용' }];
     const career = render(React.createElement(Activity, { kind: 'career', onClose() {} }));
@@ -156,6 +156,47 @@ test('React pages and dialogs render independently with empty data and with cate
     );
     state.posts[0].relatedUrl = 'javascript:alert(1)';
     assert(!render(React.createElement(PostDetail, { id: 1 })).includes('javascript:'));
+    state.selfId = 7;
+    state.projects = [
+      {
+        id: 1,
+        title: 'Owned project',
+        summary: 'Summary',
+        state: '개발 중',
+        canEdit: true,
+        links: [],
+      },
+      {
+        id: 2,
+        title: 'Joined project',
+        summary: 'Summary',
+        state: '개발 중',
+        teamMembers: [{ id: 7, name: user.name }],
+        links: [],
+      },
+      {
+        id: 3,
+        title: 'Other project',
+        summary: 'Summary',
+        state: '개발 중',
+        author: user.name,
+        links: [],
+      },
+    ];
+    const mine = render(React.createElement(Projects));
+    assert(mine.includes('Owned project'));
+    assert(mine.includes('Joined project'));
+    assert(!mine.includes('Other project'));
+    assert(mine.includes('내가 만든 프로젝트'));
+    assert(mine.includes('팀원으로 참여'));
+    const other = render(React.createElement(Projects, { id: 3 }));
+    assert(other.includes('Other project'));
+    assert(!other.includes('Owned project'));
+    assert(!other.includes('프로젝트 수정'));
+    const team = render(React.createElement(Team));
+    assert.match(team, /내 프로젝트 · 2개/);
+    assert(!team.includes('Other project'));
+    assert(!team.includes('다른 사람의 프로젝트'));
   } finally {
     await vite.close();
   }

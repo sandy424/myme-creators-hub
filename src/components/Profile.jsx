@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useHub } from '../HubContext';
 import { Modal, Avatar, Action, ErrorText } from './UI';
 import CountrySelect, { exactCountry } from './CountrySelect';
 import { publicOptions, safeUrl } from '../api';
 import { Check } from './Auth';
 import { prepareProfilePhoto, PROFILE_PHOTO_ACCEPT } from '../profilePhoto';
 import { getChatLanguage, languages } from '../languages';
+
 export default function ProfileDialog({ user, onClose, onSave }) {
   const [country, setCountry] = useState(user.country || ''),
     [photo, setPhoto] = useState(user.photo || ''),
@@ -12,6 +14,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
     [reading, setReading] = useState(false),
     [photoError, setPhotoError] = useState(''),
     [error, setError] = useState('');
+
   async function readPhoto(file) {
     if (!file) return;
     setPhotoError('');
@@ -24,15 +27,20 @@ export default function ProfileDialog({ user, onClose, onSave }) {
       setReading(false);
     }
   }
+
   async function submit(e) {
     e.preventDefault();
+
     if (busy || reading) return;
     const f = new FormData(e.currentTarget),
       portfolio = String(f.get('portfolio') || '').trim();
     setBusy(true);
+
     try {
       const c = exactCountry(country);
+
       if (country && !c) throw Error('국가 목록에서 선택하거나 정확한 국가명을 입력해 주세요.');
+
       await onSave({
         ...user,
         name: String(f.get('name')).trim(),
@@ -53,6 +61,7 @@ export default function ProfileDialog({ user, onClose, onSave }) {
       setBusy(false);
     }
   }
+  
   return (
     <Modal
       title="내 프로필"
@@ -259,12 +268,20 @@ export default function ProfileDialog({ user, onClose, onSave }) {
     </Modal>
   );
 }
+
 export function PublicProfile({ member, onClose, onChat, onConnect }) {
+  const { state, navigate } = useHub();
+  const projects = state.projects.filter(
+    (project) =>
+      (member.accountId != null && project.ownerId === member.accountId) ||
+      project.teamMembers?.some((peer) => peer.id === member.id),
+  );
+
   return (
     <Modal
       title="공개 프로필"
       kind={`[dialog&]:[border-width:0] [dialog&]:[border-style:none] [dialog&]:[border-color:currentColor]
-          [dialog&]:rounded-[24px] [dialog&]:max-w-[445px] [dialog&]:p-[0] [dialog&]:overflow-hidden
+          [dialog&]:rounded-[24px] [dialog&]:max-w-[640px] [dialog&]:p-[0] [dialog&]:overflow-hidden
           max-[500px]:[dialog&]:w-[calc(100%_-_28px)] public-profile-dialog`}
       onClose={onClose}
     >
@@ -360,6 +377,33 @@ export function PublicProfile({ member, onClose, onChat, onConnect }) {
             })}
           </section>
         )}
+        <section aria-label="공개 프로젝트" className="mt-6">
+          <h3 className="mb-3 mt-0 text-base text-muted">프로젝트 · {projects.length}개</h3>
+          {projects.length ? (
+            projects.map((project) => (
+              <button
+                key={project.id}
+                type="button"
+                onClick={() => navigate('#projects/' + project.id)}
+                className="mt-2 block w-full rounded-xl border border-solid border-line bg-white p-4 text-left hover:border-brand/30 hover:bg-brand/5"
+              >
+                <span className="text-xs font-normal text-muted">
+                  {project.ownerId === member.accountId ? '작성한 프로젝트' : '팀원으로 참여'} ·{' '}
+                  {project.state}
+                </span>
+                <strong className="my-1 block text-base">{project.title}</strong>
+                <span className="block text-sm font-normal leading-relaxed text-muted">
+                  {project.summary.slice(0, 100)}
+                </span>
+                <span className="mt-2 block text-xs text-brand">프로젝트 보기 ↗</span>
+              </button>
+            ))
+          ) : (
+            <p className="rounded-xl bg-canvas p-4 text-sm text-muted">
+              공개된 프로젝트가 없습니다.
+            </p>
+          )}
+        </section>
         {member.career?.length > 0 && (
           <section
             className={`mt-6 [&_h3]:text-[#746788] [&_h3]:m-[0_0_10px] [&_h3]:text-[16px] [&_>_p]:whitespace-pre-wrap

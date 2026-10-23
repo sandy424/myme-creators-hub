@@ -9,8 +9,52 @@ const states = [
   '출시 준비 중',
   '출시 완료',
 ];
+function projectRole(project, selfId) {
+  if (project.canEdit) return '내가 만든 프로젝트';
+  if (selfId != null && project.teamMembers?.some((member) => member.id === selfId))
+    return '팀원으로 참여';
+  return '다른 사람의 프로젝트';
+}
+function ProjectRole({ project, selfId }) {
+  const role = projectRole(project, selfId);
+  return (
+    <span
+      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${role === '다른 사람의 프로젝트' ? 'bg-canvas text-muted' : 'bg-brand/10 text-brand'}`}
+    >
+      {role === '다른 사람의 프로젝트' ? `${project.author || '회원'}님의 프로젝트` : role}
+    </span>
+  );
+}
+function ProjectSummaries({ projects, selfId, empty }) {
+  return projects.length ? (
+    projects.map((project) => (
+      <a
+        key={project.id}
+        href={'#projects/' + project.id}
+        className="block border-0 border-t border-solid border-line py-4 hover:text-brand"
+      >
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <ProjectRole project={project} selfId={selfId} />
+          <span className="text-xs text-muted">{project.state}</span>
+        </div>
+        <h3 className="my-2 text-base">{project.title}</h3>
+        <p className="my-2 text-sm leading-relaxed text-muted">{project.summary.slice(0, 100)}</p>
+        <small className="text-xs text-muted">
+          작성자 {project.author || '회원'} · 프로젝트 보기 ↗
+        </small>
+      </a>
+    ))
+  ) : (
+    <p className="my-4 rounded-xl bg-canvas p-4 text-sm leading-relaxed text-muted">{empty}</p>
+  );
+}
+
 export function Team() {
   const { user, state, navigate, open } = useHub();
+  const mine = state.projects.filter(
+    (project) => projectRole(project, state.selfId) !== '다른 사람의 프로젝트',
+  );
+  
   return (
     <>
       <section
@@ -65,32 +109,15 @@ export function Team() {
           [.original-columns_&]:min-w-0
           [.cardgrid_&:hover]:[border-color:#d3c4e9] panel`}
         >
-          <h2>공유 프로젝트 · {state.projects.length}개</h2>
-          {state.projects.map((p) => (
-            <a
-              className={`[border-top-width:1px] [border-top-style:solid] [border-top-color:var(--color-line)] p-[20px_0] block
-          [&:hover_h3]:text-[#8b5ad1] [&_strong]:text-[#1a0f2a] [&_strong]:text-[14px] [&_h3]:m-[8px_0]
-          [&_h3]:text-[16px] [&_p]:text-[#564c64] [&_p]:m-[4px_0] [&_p]:text-[16px] [&_p]:leading-[1.8]
-          [&_small]:text-[#746788] [&_small]:text-[12px] original-post`}
-              href={'#projects/' + p.id}
-              key={p.id}
-            >
-              <h3>{p.title}</h3>
-              <p>{p.summary.slice(0, 100)}</p>
-              <small>{p.state} · 프로젝트 보기 ↗</small>
-            </a>
-          ))}
-          {!state.projects.length && (
-            <p
-              className={`text-muted text-[16px]
-          [.team-welcome_&]:m-[0_0_15px]
-          [.member-card-actions_&]:m-[5px]
-          [.original-programs_&]:m-[0]
-          [.original-programs_&]:text-[16px] muted`}
-            >
-              아직 등록된 프로젝트가 없습니다.
-            </p>
-          )}
+          <h2>내 프로젝트 · {mine.length}개</h2>
+          <p className="mb-4 mt-0 text-sm text-muted">
+            내가 만들었거나 팀원으로 참여하는 프로젝트입니다.
+          </p>
+          <ProjectSummaries
+            projects={mine}
+            selfId={state.selfId}
+            empty="아직 참여 중인 프로젝트가 없습니다."
+          />
         </section>
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
@@ -135,11 +162,40 @@ export function Team() {
 }
 export function Projects({ id }) {
   const { state, open, action, notify } = useHub();
-  const p = state.projects.find((p) => p.id === Number(id)) || state.projects[0];
+  const mine = state.projects.filter(
+    (project) => projectRole(project, state.selfId) !== '다른 사람의 프로젝트',
+  );
+  const selected = state.projects.find((project) => project.id === Number(id));
+  const external = selected && projectRole(selected, state.selfId) === '다른 사람의 프로젝트';
+  const owner = external
+    ? state.members.find((member) => member.accountId === selected.ownerId)
+    : null;
+  const visible = external ? [selected] : mine;
+  const p = selected || mine[0];
   return (
     <>
       <p className={'text-muted m-[15px_0_25px] text-[16px] breadcrumb'}>
-        <a href="#team">팀협업</a> / 프로젝트
+        {external ? (
+          <>
+            <a href="#members">동료 찾기</a> /{' '}
+            {owner ? (
+              <button
+                type="button"
+                className="border-0 bg-transparent p-0 text-brand hover:underline"
+                onClick={() => open('member', { id: owner.id })}
+              >
+                {owner.name}님의 프로필
+              </button>
+            ) : (
+              selected.author
+            )}{' '}
+            / 공개 프로젝트
+          </>
+        ) : (
+          <>
+            <a href="#team">팀협업</a> / 내 프로젝트
+          </>
+        )}
       </p>
       <div
         className={`justify-between items-center gap-3 mb-[15px] flex [&_h2]:tracking-[-.6px] [&_h2]:m-[0]
@@ -157,27 +213,34 @@ export function Projects({ id }) {
             'tracking-[-1px] m-[15px_0_6px] text-[31px] max-[760px]:text-[27px] page-title'
           }
         >
-          프로젝트
+          {external ? '공개 프로젝트' : '내 프로젝트'}
         </h1>
-        <Action primary onClick={() => open('project-editor')}>
-          ＋ 프로젝트 추가
-        </Action>
+        {!external && (
+          <Action primary onClick={() => open('project-editor')}>
+            ＋ 프로젝트 추가
+          </Action>
+        )}
       </div>
       <p className={'text-muted mt-[0] text-[16px] intro'}>
-        프로젝트를 등록하고 팀에서 사용하는 작업 공간을 연결하세요.
+        {external
+          ? '크리에이터가 공개한 프로젝트의 소개와 작업 공간입니다.'
+          : '내가 만든 프로젝트와 팀원으로 참여하는 프로젝트를 관리하세요.'}
       </p>
-      <div className={'gap-[12px] m-[24px_0] p-[4px_2px_10px] flex overflow-x-auto project-picker'}>
-        {state.projects.map((p) => (
-          <a
-            href={'#projects/' + p.id}
-            className={
-              `[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[16px]
+      {!external && (
+        <div
+          className={'gap-[12px] m-[24px_0] p-[4px_2px_10px] flex overflow-x-auto project-picker'}
+        >
+          {visible.map((p) => (
+            <a
+              href={'#projects/' + p.id}
+              className={
+                `[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[16px]
           flex-col flex-1 gap-[9px]
           min-w-57.5
           max-w-75 p-4.5 flex [&_strong]:[overflow-wrap:anywhere] [&_strong]:text-[16px] [&_small]:text-muted
           [&_small]:text-[14px] project-choice ` +
-              (p.id === Number(id)
-                ? `[.project-choice&]:[background:#f6f6f7]
+                (p.id === (selected || visible[0])?.id
+                  ? `[.project-choice&]:[background:#f6f6f7]
           [.project-choice&]:[border-width:2px]
           [.project-choice&]:[border-style:solid]
           [.project-choice&]:[border-color:#a17ada]
@@ -186,24 +249,27 @@ export function Projects({ id }) {
           [.chat-contact&]:[border-color:#eae9eb]
           [.auth-tabs_button&]:text-[#8b5ad1]
           [.auth-tabs_button&]:[border-bottom-color:#8b5ad1] selected`
-                : '')
-            }
-            key={p.id}
-          >
-            <span
-              className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
+                  : '')
+              }
+              key={p.id}
+            >
+              <span
+                className={`text-[#743ac8] [background:#f6f6f7] [border-width:1px] [border-style:solid] [border-color:#efeef1]
           rounded-[5px] p-[3px_8px] text-[12px] font-[700] inline-block
           [.project-choice_&]:[align-self:flex-start]
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
-            >
-              {p.state}
-            </span>
-            <strong>{p.title}</strong>
-            <small>{p.summary.slice(0, 70)}</small>
-          </a>
-        ))}
-      </div>
+              >
+                {p.state}
+              </span>
+              <strong>{p.title}</strong>
+              <ProjectRole project={p} selfId={state.selfId} />
+              <small>작성자 {p.author || '회원'}</small>
+              <small>{p.summary.slice(0, 70)}</small>
+            </a>
+          ))}
+        </div>
+      )}
       {p ? (
         <section
           className={`[border-width:1px] [border-style:solid] [border-color:var(--color-line)] bg-white rounded-[22px] p-7
@@ -231,7 +297,7 @@ export function Projects({ id }) {
           [.original-member_&]:ml-2
           [.public-name_&]:rounded-[20px] tag`}
             >
-              선택한 프로젝트
+              <ProjectRole project={p} selfId={state.selfId} />
             </span>
             {p.canEdit ? (
               <Action onClick={() => open('project-editor', { id: p.id })}>프로젝트 수정</Action>
@@ -248,6 +314,7 @@ export function Projects({ id }) {
             )}
           </div>
           <h2>{p.title}</h2>
+          <p className="mb-3 mt-2 text-sm text-muted">작성자 {p.author || '회원'}</p>
           <p className={'whitespace-pre-wrap text-muted mt-[0] text-[16px] intro'}>{p.summary}</p>
           <p
             className={`text-muted text-[16px]
@@ -336,7 +403,7 @@ export function Projects({ id }) {
           [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] empty`}
               >
-                첫 번째 작업 공간을 등록해 보세요.
+                아직 작업 공간이 등록되지 않았습니다.
               </p>
             )}
           </section>
@@ -360,7 +427,8 @@ export function Projects({ id }) {
           [.original-columns_&]:text-[16px]
           [.original-columns_&]:leading-[1.9] panel empty`}
         >
-          등록된 프로젝트가 없습니다. 새 프로젝트를 추가해 보세요.
+          아직 참여 중인 프로젝트가 없습니다. 프로젝트를 만들거나 팀원으로 등록되면 여기에
+          표시됩니다.
         </section>
       )}
     </>
